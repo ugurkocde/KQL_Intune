@@ -1,0 +1,18 @@
+let Monthly = 
+IntuneDeviceComplianceOrg
+| where todatetime(LastContact) > ago(30d)
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| summarize count(DeviceName)
+| extend CustomName="Active Devices"
+| extend MonthlyCount=count_DeviceName;
+let Weekly=
+IntuneDeviceComplianceOrg
+| where todatetime(LastContact) > ago(7d)
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| summarize count(DeviceName)
+| extend CustomName="Active Devices"
+| extend WeeklyCount=count_DeviceName;
+Monthly
+| join kind=inner Weekly on CustomName
+| project-rename ['Last 30 Days']=MonthlyCount, ['Last 7 Days'] = WeeklyCount, Description=CustomName
+| project Description,['Last 7 Days'],['Last 30 Days']
