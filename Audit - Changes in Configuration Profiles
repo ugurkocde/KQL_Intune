@@ -1,0 +1,10 @@
+IntuneAuditLogs
+| where OperationName contains "patch DeviceConfiguration"
+| extend User = todynamic(Properties).Actor.UPN
+| extend Apps = todynamic(Properties).Actor.ApplicationName
+| extend Device = todynamic(Properties).TargetObjectIds
+| extend Policy = todynamic(Properties).TargetDisplayNames
+| mv-expand todynamic(Properties).Targets[0].ModifiedProperties
+| extend Configuration = todynamic(Properties_Targets_0_ModifiedProperties).Name
+| extend New = todynamic(Properties_Targets_0_ModifiedProperties).New
+| extend Old = todynamic(Properties_Targets_0_ModifiedProperties).Old
