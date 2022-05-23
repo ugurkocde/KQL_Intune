@@ -1,0 +1,5 @@
+IntuneDeviceComplianceOrg
+| where todatetime(LastContact) > ago(30d)
+| where ComplianceState == "Not compliant"
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| project ComplianceState, DeviceName, LastContact
