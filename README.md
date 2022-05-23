@@ -1,15 +1,18 @@
-# KQL_Intune
+# Endpoint Manager – Creating Dashboards with Azure Log Analytics and KQL
 
 Table of contents:
 
 1. Description
-2. Screenshots
-3. Useful Links
+2. Screenshots of the Dashboard
+3. Screenshots of the Query Results
+4. Useful Links
 
 
 # 1. Description
 
-# 2. Screenshots
+# 2. Screenshots of the Dashboard
+
+# 3. Screenshots
 
 ## Compliance
 
@@ -49,6 +52,6 @@ Latest Device Deployments:
 
 ![image](https://user-images.githubusercontent.com/43906965/169787141-a99f495a-f500-4d01-a4e0-9c4673e21522.png)
 
-# 3. Useful Links
+# 4. Useful Links
 
 Useful Links from Microsoft and the Community:
