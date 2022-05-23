@@ -8,4 +8,4 @@ Count of active Devices in the last 7 and 30 Days:
 
 Not compliant Devices:
 
-![image](https://user-images.githubusercontent.com/43906965/169784833-f5667ee0-f957-4fcf-8553-a76fed524f1d.png)
+![image](https://user-images.githubusercontent.com/43906965/169785026-1e3c9e4a-f172-4511-96ad-0c1812c0616b.png)
