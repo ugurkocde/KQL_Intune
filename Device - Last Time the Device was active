@@ -1,0 +1,7 @@
+IntuneDeviceComplianceOrg
+| where todatetime(LastContact) > ago(30d)
+| extend Date=format_datetime(todatetime(LastContact), "dd.MM.yyyy")
+| extend Time=format_datetime(todatetime(LastContact), "hh:mm tt")
+| extend ['Last successful connection']=strcat(Date," ",Time)
+| project DeviceName, ['Last successful connection']
+| project-rename ['Name of the Device'] = DeviceName
