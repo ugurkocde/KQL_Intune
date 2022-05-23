@@ -1,0 +1,21 @@
+let Yesterday=
+IntuneDevices
+| where TimeGenerated < ago(1d) 
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| where todatetime(LastContact) > ago(30d) 
+| summarize count() by OSVersion
+| sort by OSVersion desc
+| extend CustomName = OSVersion
+| extend Version_Yesterday = count_;
+let Today=
+IntuneDevices 
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| where todatetime(LastContact) > ago(30d) 
+| summarize count() by OSVersion
+| sort by OSVersion desc
+| extend CustomName = OSVersion
+| extend Version_Today = count_;
+Yesterday
+| join kind=inner Today on OSVersion
+| project CustomName, Version_Today, Version_Yesterday, Difference = Version_Today-Version_Yesterday
+| sort by CustomName desc
