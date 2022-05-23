@@ -33,7 +33,7 @@ Last Time the Device was active:
 
 Show Devices with specific OS Version:
 
-![image](https://user-images.githubusercontent.com/43906965/169786254-ac2ca770-afce-40c7-87e8-b025f9ddaa04.png)
+![image](https://user-images.githubusercontent.com/43906965/169787587-ebe3c8b0-6091-4592-8afe-f1266ff1d3d6.png)
 
 Show OS Versions:
 
