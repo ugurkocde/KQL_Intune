@@ -15,11 +15,11 @@ Table of contents:
 
 Count of active Devices in the last 7 and 30 Days:
 
-![image](https://user-images.githubusercontent.com/43906965/169784325-6837fc33-ccc2-415c-aa7a-f82570e50e7c.png)
+![image](https://user-images.githubusercontent.com/43906965/169788328-085f1dac-4569-457a-b346-528897b920dd.png)
 
 Not compliant Devices:
 
-![image](https://user-images.githubusercontent.com/43906965/169785026-1e3c9e4a-f172-4511-96ad-0c1812c0616b.png)
+![image](https://user-images.githubusercontent.com/43906965/169788243-cfaddf34-78e6-4e7d-98a9-2f00a7ead690.png)
 
 ## Device 
 
