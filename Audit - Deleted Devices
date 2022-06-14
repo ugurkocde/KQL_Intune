@@ -1,5 +1,5 @@
 IntuneAuditLogs
 | where OperationName contains "Delete Manageddevice"
 | extend User = todynamic(Properties).Actor.UPN
-| extend Anwendung = todynamic(Properties).Actor.ApplicationName
+| extend Application = todynamic(Properties).Actor.ApplicationName
 | extend Device = replace_regex(tostring(todynamic(Properties).TargetObjectIds), @'["\[\]]', "")
