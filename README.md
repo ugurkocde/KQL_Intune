@@ -1,57 +1,27 @@
-# Endpoint Manager – Creating Dashboards with Azure Log Analytics and KQL
+# Welcome!
 
-Table of contents:
+The goal of this repository is to share awesome KQL Queries that will help every Intune Administrator to filter for relevant informations and also present the data visually to interested parties in the form of a Azure Workbook.
 
-1. Description
-2. Screenshots of the Dashboard
-3. Screenshots of the Query Results
-4. Useful Links
+This collection of KQL Querries include some of which I have created because there was a neccessitiy or usecase for it. Other Queries are from the Community that I found particulary interisting and worth to share. The ones from the community will also contain the weblink to the source and author.
+
+Please feel free to share any feedback and suggestions on Twitter @ugurkocde!
+
+-------------
+
+I have created different categories based on the data tables from Intune:
+
+Audit
+Compliance
+Device
+Operational
+
+The data tables include the following informations:
 
 
-# 1. Description
+# What is KQL and why is it interisting?
 
-# 2. Screenshots of the Dashboard
 
-# 3. Screenshots
 
-## Compliance
+# Useful Links from Microsoft and the Community for further deep-dive:
 
-Count of active Devices in the last 7 and 30 Days:
-
-![image](https://user-images.githubusercontent.com/43906965/169788328-085f1dac-4569-457a-b346-528897b920dd.png)
-
-Not compliant Devices:
-
-![image](https://user-images.githubusercontent.com/43906965/169788243-cfaddf34-78e6-4e7d-98a9-2f00a7ead690.png)
-
-## Device 
-
-Compare OS Build, Today and Yesterday:
-
-![image](https://user-images.githubusercontent.com/43906965/169785400-274da17f-36bf-4ded-bbed-8fb36596634e.png)
-
-Last Time the Device was active:
-
-![image](https://user-images.githubusercontent.com/43906965/169785640-c807fd3b-1940-4d04-892e-7ad31694797e.png)
-
-Show Devices with specific OS Version:
-
-![image](https://user-images.githubusercontent.com/43906965/169787587-ebe3c8b0-6091-4592-8afe-f1266ff1d3d6.png)
-
-Show OS Versions:
-
-![image](https://user-images.githubusercontent.com/43906965/169786475-4efc9dff-d9a6-45fa-8061-230de0bb69f7.png)
-
-Translate OS Build to Version:
-
-![image](https://user-images.githubusercontent.com/43906965/169786641-2f491725-d0ca-4393-9fbe-5ab72524cd44.png)
-
-## Operational
-
-Latest Device Deployments:
-
-![image](https://user-images.githubusercontent.com/43906965/169787141-a99f495a-f500-4d01-a4e0-9c4673e21522.png)
-
-# 4. Useful Links
-
-Useful Links from Microsoft and the Community:
+MustLearnKQL
