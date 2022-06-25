@@ -1,0 +1,5 @@
+// List of Devices that have DeviceHealthThreatLevel Status of Secured
+IntuneDeviceComplianceOrg
+| where isnotempty(DeviceHealthThreatLevel)
+| where DeviceHealthThreatLevel == "Secured"
+| project DeviceName, UserName , DeviceHealthThreatLevel

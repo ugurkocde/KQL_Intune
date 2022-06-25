@@ -1,0 +1,9 @@
+//Intune Enrollment Failure Reasons - Devices not supported by time, failure type, and operating system
+IntuneOperationalLogs
+| extend FailureCategory_ = todynamic(Properties).FailureCategory
+| where FailureCategory_ == "DeviceNotSupported"
+| extend OS = todynamic(Properties).Os
+| extend Reason = todynamic(Properties).FailureReason
+| extend Type = todynamic(Properties).EnrollmentType
+| extend DeviceId = tostring(todynamic(Properties).AADDeviceId)
+| project FailureCategory_ , Reason, Type, OS, DeviceId

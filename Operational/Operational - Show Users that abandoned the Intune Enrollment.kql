@@ -1,0 +1,11 @@
+// Show Users that abandoned the Intune Enrollment
+// See here: https://github.com/rod-trent/SentinelKQL/blob/master/Intune-Enrollmentsabandonedbytheuser.txt
+IntuneOperationalLogs
+| where OperationName == "Enrollment" 
+| where Result == "Fail"
+| extend myJson=todynamic(Properties)
+| extend FailureReason = tostring(myJson ["FailureReason"])
+| extend Os_ = tostring(parse_json(Properties).Os)
+| extend IntuneUserId_ = tostring(parse_json(Properties).IntuneUserId)
+| where FailureReason == "UserAbandonment"
+| project FailureReason, IntuneUserId_, Os_, OperationName

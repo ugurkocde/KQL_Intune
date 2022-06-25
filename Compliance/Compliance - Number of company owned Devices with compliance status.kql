@@ -1,0 +1,16 @@
+// Count of Company owned Devices that are Compliant or Not compliant
+IntuneDeviceComplianceOrg
+| where todatetime(LastContact) > ago(30d)
+| where ComplianceState == "Not compliant" // Change to "Compliant" if you want to count only Compliant Devices
+| where OwnerType == "Company"
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| project ComplianceState, DeviceName, LastContact
+| summarize count(DeviceName)
+
+// List from above:
+IntuneDeviceComplianceOrg
+| where todatetime(LastContact) > ago(30d)
+| where ComplianceState == "Not compliant" // Change to "Compliant" if you want to count only Compliant Devices
+| where OwnerType == "Company"
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| project ComplianceState, DeviceName, LastContact

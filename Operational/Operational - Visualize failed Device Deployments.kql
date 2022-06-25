@@ -1,0 +1,16 @@
+// Visualize failed Device Deployments
+IntuneOperationalLogs 
+| extend OS = tostring(todynamic(Properties).Os)
+| where OS == "Windows"
+| extend DeviceId = tostring(todynamic(Properties).AADDeviceId)
+| where Result == "Fail"
+| join kind=leftouter IntuneDevices on DeviceId
+| project TimeGenerated, DeviceId, DeviceName
+| summarize TimeGenerated = max(TimeGenerated) by DeviceId, DeviceName
+| summarize ["Number of devices that failed deployment"] = count() by DeviceId, DeviceName, TimeGenerated
+| render timechart 
+   with (
+    kind=unstacked,
+    ytitle="Device Count",
+    xtitle="Date",
+    title="Number of devices that failed deployment") 

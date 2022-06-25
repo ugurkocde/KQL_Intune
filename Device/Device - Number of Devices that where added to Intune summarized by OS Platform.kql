@@ -1,0 +1,5 @@
+IntuneDevices
+| where CreatedDate contains "2022-06"
+| where Ownership == "Corporate"
+| project DeviceName, OS, OSVersion, UserName, CreatedDate
+| summarize count(DeviceName) by OS

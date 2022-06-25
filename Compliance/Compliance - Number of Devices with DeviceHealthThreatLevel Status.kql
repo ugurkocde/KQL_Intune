@@ -1,0 +1,29 @@
+// Number of Devices with DeviceHealthThreatLevel Status
+let secured =
+IntuneDeviceComplianceOrg
+| where isnotempty(DeviceHealthThreatLevel)
+| where DeviceHealthThreatLevel == "Secured"
+| distinct DeviceName, UserName , DeviceHealthThreatLevel
+| summarize count(DeviceName)
+| extend ['Number of Devices'] = count_DeviceName
+| extend Status = "Secured";
+let notsecured =
+IntuneDeviceComplianceOrg
+| where isnotempty(DeviceHealthThreatLevel)
+| where DeviceHealthThreatLevel == "Not Secured"
+| distinct  DeviceName, UserName , DeviceHealthThreatLevel
+| summarize count(DeviceName)
+| extend ['Number of Devices'] = count_DeviceName
+| extend Status = "Not Secured";
+let unknown =
+IntuneDeviceComplianceOrg
+| where isnotempty(DeviceHealthThreatLevel)
+| where DeviceHealthThreatLevel == "Unknown"
+| distinct  DeviceName, UserName , DeviceHealthThreatLevel
+| summarize count(DeviceName)
+| extend ['Number of Devices'] = count_DeviceName
+| extend Status = "Unknown";
+secured
+| union notsecured, unknown
+| project Status, ['Number of Devices']
+| sort by ['Number of Devices']

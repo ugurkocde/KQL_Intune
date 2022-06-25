@@ -1,0 +1,6 @@
+// Intune devices that are compliant with OS, OS Version, and number of devices
+// See here: https://github.com/rod-trent/SentinelKQL/blob/master/IntuneisCompliantByOSandOSVersion.txt
+IntuneDeviceComplianceOrg 
+| where isnotempty(DeviceName)
+| where ComplianceState == "Compliant"
+| summarize count() by OSDescription, OSVersion

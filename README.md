@@ -18,10 +18,15 @@ Operational
 The data tables include the following informations:
 
 
-# What is KQL and why is it interisting?
+# What is KQL and is it useful?
 
+
+# How to get started with KQL and Intune:
 
 
 # Useful Links from Microsoft and the Community for further deep-dive:
 
 MustLearnKQL
+More KQL Queries:
+https://github.com/reprise99/Sentinel-Queries
+https://github.com/rod-trent/SentinelKQL

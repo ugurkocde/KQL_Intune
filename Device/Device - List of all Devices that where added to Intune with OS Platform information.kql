@@ -1,0 +1,5 @@
+// List of all Devices that where added to Intune with OS Platform information
+IntuneDevices
+| where CreatedDate contains "2022-06" # You can change the month and year if you want or delete the line completely
+| where Ownership == "Corporate"
+| project DeviceName, OS, OSVersion, UserName, CreatedDate

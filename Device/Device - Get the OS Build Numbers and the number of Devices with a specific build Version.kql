@@ -1,0 +1,6 @@
+// Get the OS Build Numbers and the number of Devices with a specific build Version
+IntuneDevices
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| where todatetime(LastContact) > ago(30d) 
+| summarize Versions=count() by OSVersion
+| sort by OSVersion desc
