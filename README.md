@@ -9,14 +9,14 @@ Please feel free to share any feedback and suggestions on Twitter @ugurkocde!
 -------------
   * [What is KQL?](#what-is-kql-)
   * [How to get started with KQL and Intune:](#how-to-get-started-with-kql-and-intune-)
-  * [Audit (IntuneAuditLogs):](#audit-(intuneauditlogs)-)
-  * [Compliance (IntuneDeviceComplianceOrg):](#compliance-(intunedevicecomplianceorg)-)
-  * [Device (IntuneDevices):](#device-(intunedevices)-)
-  * [Operational (IntuneOperationalLogs):](#operational-(intuneoperationallogs)-)
-  * [Useful Links from Microsoft and the Community for further deep-dive:](#useful-links-from-microsoft-and-the-community-for-further-deep-dive-)
+  * [Categories](#Categories)
+  * [Audit (IntuneAuditLogs)](#audit-(intuneauditlogs)-)
+  * [Compliance (IntuneDeviceComplianceOrg)](#compliance-(intunedevicecomplianceorg)-)
+  * [Device (IntuneDevices)](#device-(intunedevices)-)
+  * [Operational (IntuneOperationalLogs)](#operational-(intuneoperationallogs)-)
+  * [Useful Links from Microsoft and the Community for further deep-dive](#useful-links-from-microsoft-and-the-community-for-further-deep-dive-)
 
 -------------
-
 
 # What is KQL?
 
@@ -33,6 +33,7 @@ Use the steps described on the following website to Connect your Endpoint Manage
 
 ![Image](https://shehanstechblog.files.wordpress.com/2022/05/image-46.png)
 
+# Categories
 
 I have created different categories based on the data tables from Intune to help you find the queries you want:
 
