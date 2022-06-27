@@ -8,7 +8,8 @@ Please feel free to share any feedback and suggestions on Twitter @ugurkocde!
 
 -------------
   * [What is KQL?](#what-is-kql-)
-  * [How to get started with KQL and Intune:](#how-to-get-started-with-kql-and-intune-)
+  * [How to get started with KQL and Intune](#how-to-get-started-with-kql-and-intune-)
+  * [How to use the queries in this repository](#How-to-use-the-queries-in-this-repository)
   * [Categories](#Categories)
   * [Audit (IntuneAuditLogs)](#audit-(intuneauditlogs)-)
   * [Compliance (IntuneDeviceComplianceOrg)](#compliance-(intunedevicecomplianceorg)-)
@@ -33,9 +34,13 @@ Use the steps described on the following website to Connect your Endpoint Manage
 
 ![Image](https://shehanstechblog.files.wordpress.com/2022/05/image-46.png)
 
+# How to use the queries in this repository
+
+After you configured and enabled the option to send Data from Intune to your Log Analytics Workspace, you can go to Azure -> Log Analytics Workspace -> Logs and copy paste the query you want to test.
+
 # Categories
 
-I have created different categories based on the data tables from Intune to help you find the queries you want:
+I have created different categories (folders) based on the data tables from Intune to help you find the queries you want:
 
 1. Audit
 2. Compliance
