@@ -27,11 +27,11 @@ A Kusto query is a read-only request to process data and return results. The req
 Source: https://docs.microsoft.com/en-us/azure/data-explorer/kusto/query/
 
 
-# How to get started with KQL and Intune:
+# How to get started with KQL and Intune
 
 Use the steps described on the following website to Connect your Endpoint Manager (Intune) with a Log Analytics Workspace to get started: https://shehanperera.com/2022/05/22/loganalytics-endpointmanager1/
 
-!(https://shehanstechblog.files.wordpress.com/2022/05/image-46.png)
+![Image](https://shehanstechblog.files.wordpress.com/2022/05/image-46.png)
 
 
 I have created different categories based on the data tables from Intune to help you find the queries you want:
@@ -43,7 +43,7 @@ I have created different categories based on the data tables from Intune to help
 
 The data tables include the following informations:
 
-## Audit (IntuneAuditLogs):
+## Audit (IntuneAuditLogs)
 
 |       Column      |      Description      |
 |:-----------------:|:---------------------:|
@@ -60,7 +60,7 @@ The data tables include the following informations:
 
 
 
-## Compliance (IntuneDeviceComplianceOrg):
+## Compliance (IntuneDeviceComplianceOrg)
 
 |          Column         |                                 Description                                 |
 |:-----------------------:|:---------------------------------------------------------------------------:|
@@ -91,7 +91,7 @@ The data tables include the following informations:
 | UserId                  | The Id of the user.                                                         |
 | UserName                | The user name.                                                              |
 
-## Device (IntuneDevices):
+## Device (IntuneDevices)
 
 |          Column          |                                    Description                                   |
 |:------------------------:|:--------------------------------------------------------------------------------:|
@@ -144,7 +144,7 @@ The data tables include the following informations:
 | WifiMacAddress           | The WiFi MAC address of the device                                               |
 
 
-## Operational (IntuneOperationalLogs):
+## Operational (IntuneOperationalLogs)
 
 |     Column    |      Description      |
 |:-------------:|:---------------------:|
@@ -157,7 +157,7 @@ The data tables include the following informations:
 | Type          | The name of the table |
 
 
-# Useful Links from Microsoft and the Community for further deep-dive:
+# Useful Links from Microsoft and the Community for further deep-dive
 
 MustLearnKQL from Rod Trent
 More KQL Queries: https://github.com/rod-trent/MustLearnKQL and the Book (PDF): https://github.com/rod-trent/MustLearnKQL/blob/main/Book_Version/MustLearnKQL_Book.pdf
