@@ -7,17 +7,32 @@ This collection of KQL Querries include some of which I have created because the
 Please feel free to share any feedback and suggestions on Twitter @ugurkocde!
 
 -------------
-
-
-  * [Audit (IntuneAuditLogs):](#audit--intuneauditlogs--)
-  * [Compliance (IntuneDeviceComplianceOrg):](#compliance--intunedevicecomplianceorg--)
-  * [Device (IntuneDevices):](#device--intunedevices--)
-  * [Operational (IntuneOperationalLogs):](#operational--intuneoperationallogs--)
-- [What is KQL?](#what-is-kql-)
-- [How to get started with KQL and Intune:](#how-to-get-started-with-kql-and-intune-)
-- [Useful Links from Microsoft and the Community for further deep-dive:](#useful-links-from-microsoft-and-the-community-for-further-deep-dive-)
+  * [What is KQL?](#what-is-kql-)
+  * [How to get started with KQL and Intune:](#how-to-get-started-with-kql-and-intune-)
+  * [Audit (IntuneAuditLogs):](#audit-(intuneauditlogs)-)
+  * [Compliance (IntuneDeviceComplianceOrg):](#compliance-(intunedevicecomplianceorg)-)
+  * [Device (IntuneDevices):](#device-(intunedevices)-)
+  * [Operational (IntuneOperationalLogs):](#operational-(intuneoperationallogs)-)
+  * [Useful Links from Microsoft and the Community for further deep-dive:](#useful-links-from-microsoft-and-the-community-for-further-deep-dive-)
 
 -------------
+
+
+# What is KQL?
+
+Kusto Query Language is a powerful tool to explore your data and discover patterns, identify anomalies and outliers, create statistical modeling, and more. The query uses schema entities that are organized in a hierarchy similar to SQL's: databases, tables, and columns.
+
+A Kusto query is a read-only request to process data and return results. The request is stated in plain text, using a data-flow model that is easy to read, author, and automate. Kusto queries are made of one or more query statements.
+
+Source: https://docs.microsoft.com/en-us/azure/data-explorer/kusto/query/
+
+
+# How to get started with KQL and Intune:
+
+Use the steps described on the following website to Connect your Endpoint Manager (Intune) with a Log Analytics Workspace to get started: https://shehanperera.com/2022/05/22/loganalytics-endpointmanager1/
+
+!(https://shehanstechblog.files.wordpress.com/2022/05/image-46.png)
+
 
 I have created different categories based on the data tables from Intune to help you find the queries you want:
 
@@ -142,27 +157,11 @@ The data tables include the following informations:
 | Type          | The name of the table |
 
 
-# What is KQL?
-
-Kusto Query Language is a powerful tool to explore your data and discover patterns, identify anomalies and outliers, create statistical modeling, and more. The query uses schema entities that are organized in a hierarchy similar to SQL's: databases, tables, and columns.
-
-A Kusto query is a read-only request to process data and return results. The request is stated in plain text, using a data-flow model that is easy to read, author, and automate. Kusto queries are made of one or more query statements.
-
-Source: https://docs.microsoft.com/en-us/azure/data-explorer/kusto/query/
-
-
-# How to get started with KQL and Intune:
-
-Use the steps described on the following website to Connect your Endpoint Manager (Intune) with a Log Analytics Workspace to get started: https://shehanperera.com/2022/05/22/loganalytics-endpointmanager1/
-
-!(https://shehanstechblog.files.wordpress.com/2022/05/image-46.png)
-
-
 # Useful Links from Microsoft and the Community for further deep-dive:
 
 MustLearnKQL from Rod Trent
 More KQL Queries: https://github.com/rod-trent/MustLearnKQL and the Book (PDF): https://github.com/rod-trent/MustLearnKQL/blob/main/Book_Version/MustLearnKQL_Book.pdf
 
-Example Queries:
+More Example Queries:
 https://github.com/reprise99/Sentinel-Queries
 https://github.com/rod-trent/SentinelKQL
