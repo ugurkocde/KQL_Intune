@@ -8,6 +8,17 @@ Please feel free to share any feedback and suggestions on Twitter @ugurkocde!
 
 -------------
 
+
+  * [Audit (IntuneAuditLogs):](#audit--intuneauditlogs--)
+  * [Compliance (IntuneDeviceComplianceOrg):](#compliance--intunedevicecomplianceorg--)
+  * [Device (IntuneDevices):](#device--intunedevices--)
+  * [Operational (IntuneOperationalLogs):](#operational--intuneoperationallogs--)
+- [What is KQL?](#what-is-kql-)
+- [How to get started with KQL and Intune:](#how-to-get-started-with-kql-and-intune-)
+- [Useful Links from Microsoft and the Community for further deep-dive:](#useful-links-from-microsoft-and-the-community-for-further-deep-dive-)
+
+-------------
+
 I have created different categories based on the data tables from Intune to help you find the queries you want:
 
 1. Audit
