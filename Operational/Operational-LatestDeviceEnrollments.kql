@@ -1,6 +1,6 @@
 // Show a list of Devices, with Device Name, Result and OS that have been enrolled to Intune.
 IntuneOperationalLogs 
-| where TimeGenerated > ago(24h) // Change the value in () as you desire e.g. 12h, 10d, 30d.
+| where TimeGenerated > ago(7d) // Change the value in () as you desire e.g. 12h, 10d, 30d. d = day, h = hour.
 | extend DeviceId = tostring(todynamic(Properties).IntuneDeviceId)
 | extend OS = tostring(todynamic(Properties).Os)
 | where Result == "Success"
