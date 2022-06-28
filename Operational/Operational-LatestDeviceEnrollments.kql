@@ -1,0 +1,12 @@
+// Show a list of Devices, with Device Name, Result and OS that have been enrolled to Intune.
+IntuneOperationalLogs 
+| where TimeGenerated > ago(24h) // Change the value in () as you desire e.g. 12h, 10d, 30d.
+| extend DeviceId = tostring(todynamic(Properties).IntuneDeviceId)
+| extend OS = tostring(todynamic(Properties).Os)
+| where Result == "Success"
+| where OperationName has "Enrollment"
+//| where OS == "Windows" // You can filter by OS Platform e.g. iOS, Android, Windows. Just replace the vaule between the " " and delete the // infront of |.
+| join kind=leftouter IntuneDevices on DeviceId // DeviceName from IntuneDevices. Can be delayed.
+| project TimeGenerated, DeviceId, DeviceName, Result, OperationName, OS
+| summarize TimeGenerated = max(TimeGenerated) by DeviceId, DeviceName, Result, OperationName, OS
+| sort by TimeGenerated desc
