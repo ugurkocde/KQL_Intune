@@ -1,5 +1,5 @@
 // Show Users that abandoned the Intune Enrollment
-// See here: https://github.com/rod-trent/SentinelKQL/blob/master/Intune-Enrollmentsabandonedbytheuser.txt
+// Inspiration: https://github.com/rod-trent/SentinelKQL/blob/master/Intune-Enrollmentsabandonedbytheuser.txt
 IntuneOperationalLogs
 //| where TimeGenerated > ago(7d) // Change the value in () as you desire e.g. 12h, 10d, 30d. d = day, h = hour.
 | where OperationName == "Enrollment" 
