@@ -10,4 +10,12 @@ IntuneOperationalLogs
 | extend OSVersion = tostring(todynamic(Properties).OsVersion)
 | extend UserID = tostring(todynamic(Properties).IntuneUserId) // You will find the User in your Azure AD.
 | where FailureReason == "UserAbandonment"
-| project FailureReason, UserID, OS, OSVersion, OperationName, EnrollmentType
+| project
+    TimeGenerated,
+    FailureReason,
+    UserID,
+    OS,
+    OSVersion,
+    OperationName,
+    EnrollmentType
+| sort by TimeGenerated desc 
