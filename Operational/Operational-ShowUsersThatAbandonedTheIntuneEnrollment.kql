@@ -1,0 +1,12 @@
+// Show Users that abandoned the Intune Enrollment
+IntuneOperationalLogs
+//| where TimeGenerated > ago(7d) // Change the value in () as you desire e.g. 12h, 10d, 30d. d = day, h = hour.
+| where OperationName == "Enrollment" 
+| where Result == "Fail"
+| extend EnrollmentType = tostring(todynamic(Properties).EnrollmentType)
+| extend FailureReason = tostring(todynamic(Properties).FailureReason)
+| extend OS = tostring(todynamic(Properties).Os)
+| extend OSVersion = tostring(todynamic(Properties).OsVersion)
+| extend UserID = tostring(todynamic(Properties).IntuneUserId) // You will find the User in your Azure AD.
+| where FailureReason == "UserAbandonment"
+| project FailureReason, UserID, OS, OSVersion, OperationName, EnrollmentType
