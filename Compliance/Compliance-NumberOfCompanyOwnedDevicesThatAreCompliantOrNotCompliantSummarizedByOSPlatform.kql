@@ -1,8 +1,25 @@
 // Number of Company owned Devices that are Compliant or Not Compliant summarized by OS Platform
-IntuneDeviceComplianceOrg
-| where todatetime(LastContact) > ago(30d)
-| where ComplianceState == "Not compliant" // Change to "Compliant" if you want to list only Compliant Devices
-| where OwnerType == "Company"
-| summarize arg_max(TimeGenerated, *) by DeviceName
-| project ComplianceState, DeviceName, LastContact, OSDescription, OS
-| summarize count(DeviceName) by OSDescription
+let notcompliant =
+    IntuneDeviceComplianceOrg
+    | where ComplianceState == "Not compliant"
+    | where OwnerType == "Company"
+    | where OSDescription != ""
+    | summarize arg_max(TimeGenerated, *) by DeviceName
+    | project ComplianceState, DeviceName, LastContact, OSDescription, OS
+    | summarize count(DeviceName) by OSDescription;
+let compliant =
+    IntuneDeviceComplianceOrg
+    | where ComplianceState == "Compliant"
+    | where OwnerType == "Company"
+    | where OSDescription != ""
+    | summarize arg_max(TimeGenerated, *) by DeviceName
+    | project ComplianceState, DeviceName, LastContact, OSDescription, OS
+    | summarize count(DeviceName) by OSDescription;
+notcompliant
+| join kind=inner compliant on OSDescription
+| project-rename
+    ["Compliant"]=count_DeviceName1,
+    ["Not Compliant"]=count_DeviceName,
+    ["Platform"]=OSDescription
+| project ["Platform"], ["Compliant"], ["Not Compliant"]
+| sort by Compliant desc 
