@@ -1,3 +1,4 @@
+// Show all Windows Versions and Number of Devices with each Version
 IntuneDevices
 | where OS contains "Windows"
 | summarize arg_max(TimeGenerated, *) by DeviceName
@@ -14,4 +15,4 @@ IntuneDevices
 | summarize ['Number of Devices']=count(DeviceName) by WindowsVersion
 | distinct WindowsVersion, ['Number of Devices'] 
 | sort by ['Number of Devices'] desc
-| where WindowsVersion != "Unknown"
+//| where WindowsVersion != "Unknown" // Activate this line to show only Devices that have reported the Windows Version
