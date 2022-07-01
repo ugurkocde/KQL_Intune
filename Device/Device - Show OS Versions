@@ -1,8 +1,0 @@
-IntuneDevices
-| extend Windows_10 = OSVersion startswith "10"
-| extend Windows_11 = OSVersion startswith "11"
-| extend 21H2 = OSVersion contains "19044"
-| extend 21H1 = OSVersion contains "19043"
-| extend 20H2 = OSVersion contains "19042"
-| extend 20H1 = OSVersion contains "19041"
-| project OSVersion, DeviceName, Windows_10, Windows_11, 21H2, 21H1, 20H2, 20H1

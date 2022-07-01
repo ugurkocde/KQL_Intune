@@ -1,0 +1,17 @@
+IntuneDevices
+| where OS contains "Windows"
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| where todatetime(LastContact) > ago(30d) 
+| extend WindowsVersion = case(
+    OSVersion contains '19041', "20H1", 
+    OSVersion contains '19042', "20H2",    
+    OSVersion contains '19043', "21H1", 
+    OSVersion contains '19044', "21H2",
+    OSVersion contains '18363', "1909",
+    OSVersion contains '22000', "Win11 21H2",
+    OSVersion contains '22621', "Win11 Insider (22H2)",
+    "Unknown")
+| summarize ['Number of Devices']=count(DeviceName) by WindowsVersion
+| distinct WindowsVersion, ['Number of Devices'] 
+| sort by ['Number of Devices'] desc
+| where WindowsVersion != "Unknown"
