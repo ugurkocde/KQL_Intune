@@ -1,5 +1,6 @@
+// Show a list of Devices that have recieved the Wipe command in Intune and also display who or which application has wiped a device.
 IntuneAuditLogs
 | where OperationName contains "wipe"
-| extend User = todynamic(Properties).Actor.UPN
-| extend Application = todynamic(Properties).Actor.ApplicationName
-| extend Device = replace_regex(tostring(todynamic(Properties).TargetObjectIds), @'["\[\]]', "")
+| extend User = todynamic(Properties).Actor.UPN // Show the user (initiator) if present.
+| extend Application = todynamic(Properties).Actor.ApplicationName // Show the application (initiator) if present.
+| extend Device = replace_regex(tostring(todynamic(Properties).TargetObjectIds), @'["\[\]]', "") // Show target device.
