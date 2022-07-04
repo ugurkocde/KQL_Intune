@@ -1,7 +1,7 @@
 // Visualize Number of Devices with different SKU (Pro and Enterprise Versions)
 IntuneDevices
 | where OS == "Windows"
-| where todatetime(LastContact) > ago(30d) 
+| where todatetime(LastContact) > ago(30d) // filter for devices that have contacted intune in the last 30 days
 | summarize arg_max(TimeGenerated, *) by DeviceName
 | summarize Number=count() by SkuFamily
 | render piechart 
