@@ -1,3 +1,4 @@
+// Show a list of devices and timestamp the last time they successfully connected to Intune.
 IntuneDeviceComplianceOrg
 | where todatetime(LastContact) > ago(30d)
 | extend Date=format_datetime(todatetime(LastContact), "dd.MM.yyyy")
