@@ -1,0 +1,14 @@
+// Visualize the Windows Build Numbers and the number of Devices 
+IntuneDevices
+| where OS == "Windows"
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| where todatetime(LastContact) > ago(30d) // Include only Devices that had a connection with Intune in the last 30 days.
+| summarize Devices = count() by OSVersion
+| where OSVersion != "0.0.0.0" // Exclude devices that have not reported the Windows Build.
+| sort by Devices
+| render columnchart // Visualize the output.
+    with (
+    kind=unstacked,
+    ytitle="Device Count",
+    xtitle="Windows Build",
+    title="Number of Devices by Windows Build") 
