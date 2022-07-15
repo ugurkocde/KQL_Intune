@@ -1,4 +1,4 @@
-// Show a list of devices whose OS Drive are not bitlocker encrypted.
+// Show a list of devices whose the OS Drive is not bitlocker encrypted.
 IntuneDevices
 | where OS == "Windows"
 | where EncryptionStatusString == "False"
