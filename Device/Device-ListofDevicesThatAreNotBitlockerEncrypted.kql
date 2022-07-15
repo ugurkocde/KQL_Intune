@@ -1,0 +1,7 @@
+// Show a list of devices whose OS Drive are not bitlocker encrypted.
+IntuneDevices
+| where OS == "Windows"
+| where EncryptionStatusString == "False"
+| where Ownership == "Corporate"
+| where CompliantState == "Noncompliant"
+| project DeviceName, EncryptionStatusString, CompliantState

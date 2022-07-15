@@ -1,0 +1,4 @@
+// Number of devices that are managed by Intune or are Co-managed
+IntuneDevices
+| where OS == "Windows"
+| summarize count(DeviceName) by ManagedBy

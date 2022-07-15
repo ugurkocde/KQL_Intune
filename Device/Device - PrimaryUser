@@ -1,0 +1,5 @@
+// List of Devices with no PrimaryUser
+IntuneDevices
+| where OS == "Windows"
+| where PrimaryUser startswith "000000"
+| project DeviceName, PrimaryUser
