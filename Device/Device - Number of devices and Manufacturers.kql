@@ -1,4 +1,4 @@
-// List of Models and Manufacturers and number of devices for each model
+// List of device models and Manufacturers and number of devices for each model
 IntuneDevices
 | where OS == "Windows"
 | summarize count(DeviceName) by Model, Manufacturer
