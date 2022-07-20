@@ -7,7 +7,7 @@ IntuneDeviceComplianceOrg
 | project ComplianceState, DeviceName, LastContact
 | summarize count(DeviceName)
 
-// List from above:
+// Create a List with all devices:
 IntuneDeviceComplianceOrg
 | where todatetime(LastContact) > ago(30d)
 | where ComplianceState == "Not compliant" // Change to "Compliant" if you want to count only Compliant Devices
