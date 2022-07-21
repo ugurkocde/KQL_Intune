@@ -1,0 +1,5 @@
+IntuneOperationalLogs 
+| where TimeGenerated > ago(30d) // look for devices that were active in the last 30 days
+| where OperationName == "Enrollment" // Filter for enrollments
+| extend Type = todynamic(Properties).EnrollmentType // Look into properties for the enrollment type
+| summarize count(OperationName) by tostring(Type)

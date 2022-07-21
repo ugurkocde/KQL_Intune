@@ -13,4 +13,4 @@ IntuneDeviceComplianceOrg
 | where ComplianceState == "Not compliant" // Change to "Compliant" if you want to count only Compliant Devices
 | where OwnerType == "Company"
 | summarize arg_max(TimeGenerated, *) by DeviceName
-| project ComplianceState, DeviceName, LastContact
+| project ComplianceState, DeviceName, LastContact, OS

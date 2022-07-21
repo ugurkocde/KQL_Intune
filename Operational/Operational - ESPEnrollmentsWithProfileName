@@ -1,0 +1,8 @@
+IntuneOperationalLogs 
+| where TimeGenerated > ago(30d) 
+| where OperationName == "ESPEnrollment" // Filter for devices with ESP Enrollment
+| extend Type = todynamic(Properties).EnrollmentTypeMessage
+| extend ESPPolicy = todynamic(Properties).ESPPolicyName // Show ESP Profile if present
+| where Type != ""
+| summarize count(OperationName) by tostring(Type), tostring(ESPPolicy)
+| project Type, ESPPolicy, count_OperationName
