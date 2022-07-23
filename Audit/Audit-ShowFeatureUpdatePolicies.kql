@@ -1,0 +1,7 @@
+// Show changes to Feature Update Policies and who created or changed them.
+IntuneAuditLogs
+| where OperationName has "WindowsFeatureUpdateProfile"
+| extend User = todynamic(Properties).Actor.UPN
+| extend ['Name of Policy'] = todynamic(Properties).TargetDisplayNames[0]
+| extend Changes = todynamic(Properties).Targets[0].ModifiedProperties[0].Name
+| project ['Name of Policy'], Changes, User
