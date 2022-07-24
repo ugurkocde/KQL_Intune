@@ -1,0 +1,7 @@
+// Show devices that have been remote locked and who initiated that.
+IntuneAuditLogs
+| where OperationName has "remoteLock"
+| extend User = todynamic(Properties).Actor.UPN
+| extend IntuneDeviceID = todynamic(Properties).TargetObjectIds[0]
+| project TimeGenerated, IntuneDeviceID, User
+| sort by TimeGenerated desc 
