@@ -1,0 +1,8 @@
+// Show devices for which the enableLostMode was activated and who initiated that.
+IntuneAuditLogs
+| where OperationName has "enableLostMode"
+| extend User = tostring(todynamic(Properties).Actor.UPN)
+| extend DeviceId = tostring(todynamic(Properties).TargetObjectIds[0])
+| join kind=leftouter IntuneDevices on DeviceId // DeviceName from IntuneDevices
+| distinct TimeGenerated, User, DeviceName
+| sort by TimeGenerated desc 

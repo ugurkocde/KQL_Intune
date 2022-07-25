@@ -1,0 +1,8 @@
+// Show client certificates that have created or changed who initiated that.
+IntuneAuditLogs
+| where OperationName has "ClientCertificate"
+| extend User = tostring(todynamic(Properties).Actor.UPN)
+| extend DeviceId = tostring(todynamic(Properties).TargetObjectIds[0])
+| join kind=leftouter IntuneDevices on DeviceId // DeviceName from IntuneDevices
+| distinct TimeGenerated, User, DeviceName, OperationName
+| sort by TimeGenerated desc 

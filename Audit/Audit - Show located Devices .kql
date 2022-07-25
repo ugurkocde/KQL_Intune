@@ -1,0 +1,8 @@
+// Show devices that have been remote locked and who initiated that.
+IntuneAuditLogs
+| where OperationName has "locateDevice"
+| extend User = tostring(todynamic(Properties).Actor.UPN)
+| extend DeviceId = tostring(todynamic(Properties).TargetObjectIds[0])
+| join kind=leftouter IntuneDevices on DeviceId // DeviceName from IntuneDevices
+| distinct TimeGenerated, User, DeviceName
+| sort by TimeGenerated desc 

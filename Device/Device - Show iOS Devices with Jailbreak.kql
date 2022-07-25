@@ -1,0 +1,4 @@
+IntuneDevices 
+| where OS == "iOS/iPadOS"
+| where JailBroken == "True"
+| project JailBroken, DeviceName, UPN
