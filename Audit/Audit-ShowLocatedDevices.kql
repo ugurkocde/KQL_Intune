@@ -1,4 +1,4 @@
-// Show devices that have been remote locked and who initiated that.
+// Show Devices for which the option “Locate Device“ was used.
 IntuneAuditLogs
 | where OperationName has "locateDevice"
 | extend User = tostring(todynamic(Properties).Actor.UPN)
