@@ -1,4 +1,4 @@
-// Show client certificates that have created or changed who initiated that.
+// Show client certificates that have been created, changed or deleted in Intune and who initiated that.
 IntuneAuditLogs
 | where OperationName has "ClientCertificate"
 | extend User = tostring(todynamic(Properties).Actor.UPN)
