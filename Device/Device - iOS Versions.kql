@@ -1,0 +1,23 @@
+// Number of iPhones and iPads on Version 14, 15, 16
+let version_16 =
+IntuneDevices 
+| where OS == "iOS/iPadOS"
+| where OSVersion contains  "16"
+| summarize ['iOS 16'] = count(DeviceName)
+| extend Dummy = "Number of Devices";
+let version_15 =
+IntuneDevices 
+| where OS == "iOS/iPadOS"
+| where OSVersion contains  "15"
+| summarize ['iOS 15'] = count(DeviceName)
+| extend Dummy = "Number of Devices";
+let version_14 =
+IntuneDevices
+| where OS == "iOS/iPadOS"
+| where OSVersion contains  "14"
+| summarize ['iOS 14'] = count(DeviceName)
+| extend Dummy = "Number of Devices";
+version_16
+| join kind=inner version_15 on Dummy 
+| join kind=inner version_14 on Dummy 
+| distinct Dummy, ['iOS 14'], ['iOS 15'], ['iOS 16']
