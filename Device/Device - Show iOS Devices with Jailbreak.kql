@@ -1,3 +1,4 @@
+// Jailbroken devices in Intune
 IntuneDevices 
 | where OS == "iOS/iPadOS"
 | where Ownership == "Corporate"
