@@ -1,0 +1,26 @@
+// Show all devices and Join Types
+IntuneDevices
+| where OS == "Windows"
+| where isnotempty(JoinType)
+| distinct JoinType, DeviceName, DeviceRegistrationState
+
+// Show only Hybrid Azure AD Joined Devices:
+IntuneDevices
+| where OS == "Windows"
+| where isnotempty(JoinType)
+| where JoinType has "Hybrid" 
+| distinct JoinType, DeviceName, DeviceRegistrationState
+
+// Show only Azure AD Joined Devices:
+IntuneDevices
+| where OS == "Windows"
+| where isnotempty(JoinType)
+| where JoinType == "Azure AD joined" 
+| distinct JoinType, DeviceName, DeviceRegistrationState
+
+// Show only Azure AD registered Devices:
+IntuneDevices
+| where OS == "Windows"
+| where isnotempty(JoinType)
+| where JoinType == "Azure AD registered" 
+| distinct JoinType, DeviceName, DeviceRegistrationState
