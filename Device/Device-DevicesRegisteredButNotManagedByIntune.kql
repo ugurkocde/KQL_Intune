@@ -1,4 +1,4 @@
-// Devices that are registered in Intune but not managed by it. Also shows User and Device Name as well when it was regitered Intune.
+// Devices that are registered in Intune but not managed by it. Also shows User and Device Name as well when it was registered Intune.
 IntuneDevices 
 | where DeviceState != "Managed"
 | where SourceSystem == "Microsoft Intune"
