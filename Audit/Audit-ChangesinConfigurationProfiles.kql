@@ -1,5 +1,5 @@
 IntuneAuditLogs
-| where OperationName contains "patch DeviceConfiguration"
+| where OperationName contains "patch"
 | extend User = todynamic(Properties).Actor.UPN
 | extend Apps = todynamic(Properties).Actor.ApplicationName
 | extend Device = todynamic(Properties).TargetObjectIds
