@@ -1,3 +1,4 @@
+// Compare OS Version changes between yesterday and today. It will calculate the difference (number of devices) between two days.
 let Yesterday=
 IntuneDevices
 | where TimeGenerated < ago(1d) 
