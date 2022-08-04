@@ -1,0 +1,8 @@
+// Out-of-support iOS Versions
+IntuneDevices 
+| where OS has "iOS"
+| extend Version = todecimal(OSVersion)
+| where Version < 13
+| where DeviceName != "User deleted for this device"
+| where Ownership == "Corporate"
+| project DeviceName, Version, Ownership

@@ -1,0 +1,8 @@
+// Out-of-support Android Versions
+IntuneDevices 
+| where OS has "Android"
+| extend Version = todecimal(OSVersion)
+| where Version < 10
+| where DeviceName != "User deleted for this device"
+| where Ownership == "Corporate"
+| project DeviceName, UserName , Version, Ownership
