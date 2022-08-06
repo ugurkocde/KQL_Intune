@@ -1,6 +1,0 @@
-// Numberof Successful Enrollments by OS
-// See here: https://github.com/rod-trent/SentinelKQL/blob/master/IntuneCountofSuccessfulEnrollmentsbyOS.txt
-IntuneOperationalLogs 
-| where OperationName == "Enrollment" and Result == "Success"
-| extend Os_ = tostring(parse_json(Properties).Os)
-| summarize count() by Os_
