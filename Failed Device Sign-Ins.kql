@@ -1,0 +1,10 @@
+SigninLogs
+| where OperationName == "Sign-in activity"
+| where UserDisplayName != "On-Premises Directory Synchronization Service Account"
+| where isnotempty(Status)
+| extend Login_Status = tostring(todynamic(Status).errorCode) // Check the error code here: https://login.microsoftonline.com/error
+| extend Login_Status_Info = tostring(todynamic(Status).failureReason)
+| extend Device_Join_Status = tostring(todynamic(DeviceDetail).trustType)
+| where isnotempty(Device_Join_Status) 
+| where AppDisplayName == "Windows Sign In"
+| project TimeGenerated, UserDisplayName, AppDisplayName, Login_Status, Login_Status_Info, Device_Join_Status, AuthenticationRequirement

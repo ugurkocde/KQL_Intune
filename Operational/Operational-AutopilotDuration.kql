@@ -1,0 +1,11 @@
+// Show how long the Autopilot process took in seconds and minutes. Result also shows DeviceName for further troubleshooting if needed.
+IntuneOperationalLogs
+| extend DeviceId = tostring(todynamic(Properties).DeviceId)
+| extend Time_Seconds = todynamic(Properties).TimeDiff
+| extend Autopilot = todynamic(Properties).IsAutopilot
+| extend Status = todynamic(Properties).Status
+| extend Time_Minutes = Time_Seconds/60
+| where Status == "Completed"
+| where isnotempty(Autopilot)
+| join kind=leftouter IntuneDevices on DeviceId 
+| project ['Is Autopilot?'] = Autopilot, Status, DeviceName, Time_Minutes, Time_Seconds 

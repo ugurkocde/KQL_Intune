@@ -1,0 +1,9 @@
+/ Shows Devices where User did not reach Desktop even though Auopilot was successful. Result also shows DeviceName for further troubleshooting if needed.
+IntuneOperationalLogs
+| extend DeviceId = tostring(todynamic(Properties).DeviceId)
+| extend DidUserReachDesktop = todynamic(Properties).DidUserReachDesktop
+| extend Autopilot = todynamic(Properties).IsAutopilot
+| where isnotempty(DidUserReachDesktop)
+| join kind=leftouter IntuneDevices on DeviceId 
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| project DeviceName, Autopilot, DidUserReachDesktop

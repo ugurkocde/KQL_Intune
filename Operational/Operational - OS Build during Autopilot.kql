@@ -1,0 +1,8 @@
+// Show the OS Build of Windows during Autopilot. Result also shows DeviceName for analyzing any future update or upgrade events.
+IntuneOperationalLogs
+| extend DeviceId = tostring(todynamic(Properties).DeviceId)
+| extend Version = todynamic(Properties).Version
+| where isnotempty(Version)
+| join kind=leftouter IntuneDevices on DeviceId 
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| project DeviceName, ['OS Build during Autopilot'] = Version
