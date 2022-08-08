@@ -9,6 +9,9 @@ SigninLogs
 | extend location_city = tostring(todynamic(LocationDetails).city)
 | extend location_state = tostring(todynamic(LocationDetails).state)
 | extend Location = strcat(location_country, " ", "/", " ", location_state, " ", "/"," ", location_city)
+| extend Authentication_Method = tostring(todynamic(AuthenticationDetails).[0].authenticationMethod)
+| extend Authentication_Detail = tostring(todynamic(AuthenticationDetails).[0].authenticationStepResultDetail)
+| extend Authentication_Success = tostring(todynamic(AuthenticationDetails).[0].succeeded)
 | where isnotempty(Device_Join_Status) 
-| where AppDisplayName == "Windows Sign In"
-| project TimeGenerated, UserDisplayName, AppDisplayName, Login_Status, Login_Status_Info, Device_Join_Status, AuthenticationRequirement, Location
+//| where AppDisplayName == "Windows Sign In"
+| project TimeGenerated, UserDisplayName, AppDisplayName, Login_Status, Login_Status_Info, Device_Join_Status, Location,  Authentication_Method, Authentication_Detail, Authentication_Success
