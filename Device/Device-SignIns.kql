@@ -1,3 +1,6 @@
+// This query uses logs from Azure.
+// Show Device Logins for Azure joined devices. Result will show success, failure, login status, error codes as well as the location (Country, State, City) of the device.
+
 SigninLogs
 | where OperationName == "Sign-in activity"
 | where UserDisplayName != "On-Premises Directory Synchronization Service Account"
