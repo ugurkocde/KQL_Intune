@@ -29,6 +29,9 @@
                 "description": "Shows Devices where User did not reach Desktop even though Auopilot was successful. Result also shows DeviceName for further troubleshooting if needed.",
                 "body": "IntuneOperationalLogs\r\n| extend DidUserReachDesktop = todynamic(Properties).DidUserReachDesktop",
                 "related": {
+                    "categories": [
+                        "monitor"
+                    ],
                     "resourceTypes": [
                         "microsoft.operationalinsights/workspaces"
                     ]
