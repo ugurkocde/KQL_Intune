@@ -13,5 +13,5 @@ SigninLogs
 | extend Authentication_Detail = tostring(todynamic(AuthenticationDetails).[0].authenticationStepResultDetail)
 | extend Authentication_Success = tostring(todynamic(AuthenticationDetails).[0].succeeded)
 | where isnotempty(Device_Join_Status) 
-//| where AppDisplayName == "Windows Sign In"
+| where AppDisplayName == "Windows Sign In"
 | project TimeGenerated, UserDisplayName, AppDisplayName, Login_Status, Login_Status_Info, Device_Join_Status, Location,  Authentication_Method, Authentication_Detail, Authentication_Success
