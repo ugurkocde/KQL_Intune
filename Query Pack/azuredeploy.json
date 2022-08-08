@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "resourceName": {
+            "defaultValue": "KQL_Intune",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.OperationalInsights/querypacks",
+            "apiVersion": "2019-09-01-preview",
+            "name": "[parameters('resourceName')]",
+            "tags": {},
+            "location": "[resourceGroup().location]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab5')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune - Did User Reach Desktop",
+                "description": "Shows Devices where User did not reach Desktop even though Auopilot was successful. Result also shows DeviceName for further troubleshooting if needed.",
+                "body": "IntuneOperationalLogs\r\n| extend DidUserReachDesktop = todynamic(Properties).DidUserReachDesktop",
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        }
+    ]
+}
