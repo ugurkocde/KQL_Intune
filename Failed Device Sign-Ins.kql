@@ -5,6 +5,10 @@ SigninLogs
 | extend Login_Status = tostring(todynamic(Status).errorCode) // Check the error code here: https://login.microsoftonline.com/error
 | extend Login_Status_Info = tostring(todynamic(Status).failureReason)
 | extend Device_Join_Status = tostring(todynamic(DeviceDetail).trustType)
+| extend location_country = tostring(todynamic(LocationDetails).countryOrRegion)
+| extend location_city = tostring(todynamic(LocationDetails).city)
+| extend location_state = tostring(todynamic(LocationDetails).state)
+| extend Location = strcat(location_country, " ", "/", " ", location_state, " ", "/"," ", location_city)
 | where isnotempty(Device_Join_Status) 
 | where AppDisplayName == "Windows Sign In"
-| project TimeGenerated, UserDisplayName, AppDisplayName, Login_Status, Login_Status_Info, Device_Join_Status, AuthenticationRequirement
+| project TimeGenerated, UserDisplayName, AppDisplayName, Login_Status, Login_Status_Info, Device_Join_Status, AuthenticationRequirement, Location
