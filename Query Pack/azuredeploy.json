@@ -30,7 +30,7 @@
                 "body": "IntuneOperationalLogs\r\n| extend DidUserReachDesktop = todynamic(Properties).DidUserReachDesktop",
                 "related": {
                     "categories": [
-                        "audit"
+                        "desktopanalytics"
                     ],
                     "resourceTypes": [
                         "microsoft.operationalinsights/workspaces"
