@@ -1,4 +1,4 @@
-/ Shows Devices where User did not reach Desktop even though Auopilot was successful. Result also shows DeviceName for further troubleshooting if needed.
+// Shows Devices where User did not reach Desktop even though Auopilot was successful. Result also shows DeviceName for further troubleshooting if needed.
 IntuneOperationalLogs
 | extend DeviceId = tostring(todynamic(Properties).DeviceId)
 | extend DidUserReachDesktop = todynamic(Properties).DidUserReachDesktop
