@@ -29,5 +29,5 @@ This is essentially a Template which will deploy all queries from this repositor
 
 # Links
 
-1. ![Query packs in Azure Monitor Logs (preview)](https://docs.microsoft.com/en-us/azure/azure-monitor/logs/query-packs)
-2. ![Log Analytics Query packs](https://techcommunity.microsoft.com/t5/azure-observability-blog/log-analytics-query-packs/ba-p/2314721)
+1. [Query packs in Azure Monitor Logs (preview)](https://docs.microsoft.com/en-us/azure/azure-monitor/logs/query-packs)
+2. [Log Analytics Query packs](https://techcommunity.microsoft.com/t5/azure-observability-blog/log-analytics-query-packs/ba-p/2314721)
