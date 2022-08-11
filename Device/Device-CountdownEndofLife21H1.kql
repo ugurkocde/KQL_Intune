@@ -1,4 +1,4 @@
-// Countdown: 
+// Show the number of windows devices on 21H1, the date of EOL for 21H1 as well as a countdown in days.
 IntuneDevices 
 | where OS has "Windows"
 | extend Build = split(OSVersion, ".")[2]
