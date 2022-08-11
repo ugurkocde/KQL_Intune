@@ -1,0 +1,45 @@
+let Windows11_21H2 =
+    IntuneDevices 
+    | where OS has "Windows"
+    | extend Build = split(OSVersion, ".")[2]
+    | where Build contains "22000"
+    | summarize count(DeviceName) by tostring(Build)
+    | extend ['Win11_21H2 Home, Pro - End of servicing'] = "2023-10-10" 
+    | extend ['Win11_21H2 Enterprise - End of servicing'] = "2024-10-08" 
+    | extend CustomName="Number of Devices";
+let 21H2 =
+    IntuneDevices 
+    | where OS has "Windows"
+    | extend Build = split(OSVersion, ".")[2]
+    | where Build contains "19044"
+    | summarize count(DeviceName) by tostring(Build)
+    | extend ['21H2 Home, Pro - End of servicing'] = "2023-06-13" 
+    | extend ['21H2 Enterprise - End of servicing'] = "2024-06-11" 
+    | extend CustomName="Number of Devices";
+let 21H1 =
+    IntuneDevices 
+    | where OS has "Windows"
+    | extend Build = split(OSVersion, ".")[2]
+    | where Build contains "19043"
+    | summarize count(DeviceName) by tostring(Build)
+    | extend ['21H1 Home, Pro - End of servicing'] = "2022-12-13" 
+    | extend ['21H1 Enterprise - End of servicing'] = "2022-12-13" 
+    | extend CustomName="Number of Devices";
+let 20H2 =
+    IntuneDevices 
+    | where OS has "Windows"
+    | extend Build = split(OSVersion, ".")[2]
+    | where Build contains "19042"
+    | summarize count(DeviceName) by tostring(Build)
+    | extend ['20H2 Home, Pro - End of servicing'] = "End of servicing" 
+    | extend ['20H2 Enterprise - End of servicing'] = "2023-05-09" 
+    | extend CustomName="Number of Devices";
+21H2
+| join kind=inner 21H1 on CustomName
+| join kind=inner 20H2 on CustomName
+| join kind=inner Windows11_21H2 on CustomName
+| project 
+    ['Number of Devices with 21H2'] = count_DeviceName, ['21H2 Home, Pro - End of servicing'], ['21H2 Enterprise - End of servicing'],
+    ['Number of Devices with 21H1'] = count_DeviceName1, ['21H1 Home, Pro - End of servicing'], ['21H1 Enterprise - End of servicing'],
+    ['Number of Devices with 20H2'] = count_DeviceName2,  ['20H2 Home, Pro - End of servicing'], ['20H2 Enterprise - End of servicing'],
+    ['Number of Devices with Win11_21H2'] = count_DeviceName3, ['Win11_21H2 Home, Pro - End of servicing'], ['Win11_21H2 Enterprise - End of servicing']

@@ -1,0 +1,9 @@
+// Countdown: 
+IntuneDevices 
+| where OS has "Windows"
+| extend Build = split(OSVersion, ".")[2]
+| where Build contains "19043"
+| where SkuFamily == "Enterprise"
+| summarize count(DeviceName) by tostring(Build)
+| extend ['21H1 Enterprise - End of servicing'] = todatetime('2022-12-13')
+| extend ['Countdown in Days'] = datetime_diff('day', now(), ['21H1 Enterprise - End of servicing'])
