@@ -1,3 +1,4 @@
+// Show EOL Dates and the number of devices effected for Win 11 21H2, Win 10 21H2, 21H1 and also 20H2.
 let Windows11_21H2 =
     IntuneDevices 
     | where OS has "Windows"
