@@ -2,7 +2,6 @@
 IntuneDevices
 | where TimeGenerated > ago (30d)
 | summarize arg_max(DeviceName, *) by DeviceName
-| sample 10
 | where isnotempty(CompliantState)
 | summarize ComplianceCount=count()by CompliantState
 | render piechart 
