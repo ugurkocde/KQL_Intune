@@ -1,5 +1,14 @@
-// Enrollment Statistics
-// See here: https://github.com/rod-trent/SentinelKQL/blob/master/IntuneEnrollmentStatistics.txt
+// Visualize Enrollment Statistics (Success and Fail) over time
 IntuneOperationalLogs
 | where  OperationName == "Enrollment"
-| summarize count() by Result
+| where TimeGenerated > ago(365d)
+| extend DeviceId = tostring(todynamic(Properties).IntuneDeviceId)
+| join kind=leftouter IntuneDevices on DeviceId 
+| summarize arg_max(DeviceId, *) by DeviceId, startofweek(TimeGenerated)
+//| where Result == "Success" // Filter for success or Fail
+| summarize EnrollmentCount=count()by Result, startofweek(TimeGenerated)
+| render timechart  
+    with (
+    ytitle="Device Count",
+    xtitle="Week",
+    title="Enrollments per week over time")

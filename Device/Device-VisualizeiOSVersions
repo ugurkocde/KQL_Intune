@@ -1,0 +1,8 @@
+// Visualize iOS Versions and filtering for devices that had a connection to intune in the last 30 days.
+IntuneDevices
+| where OS contains "iOS/iPadOS"
+| where todatetime(LastContact) > ago(30d) 
+| summarize arg_max(TimeGenerated, *) by DeviceName
+| summarize Versionen=count() by OSVersion
+| sort by Versionen desc 
+| render piechart with ( title="iOS/iPadOS Versions")

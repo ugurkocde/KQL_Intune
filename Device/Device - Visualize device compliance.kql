@@ -1,12 +1,9 @@
 // Visualize device compliance (compliant, non-compliant, managed by Config Manager, not evaluated or in grace period) per week over time
-// See here: https://github.com/reprise99/Sentinel-Queries/blob/main/Intune/IntuneDevices-VisualizeDeviceComplianceovertime.kql
 IntuneDevices
-| where TimeGenerated > ago (180d)
-| summarize arg_max(DeviceName, *) by DeviceName, startofweek(TimeGenerated)
+| where TimeGenerated > ago (30d)
+| summarize arg_max(DeviceName, *) by DeviceName
+| sample 10
 | where isnotempty(CompliantState)
-| summarize ComplianceCount=count()by CompliantState, startofweek(TimeGenerated)
-| render timechart
-    with (
-    ytitle="Device Count",
-    xtitle="Week",
-    title="Device compliance per week over time")
+| summarize ComplianceCount=count()by CompliantState
+| render piechart 
+    with (title="Device compliance")
