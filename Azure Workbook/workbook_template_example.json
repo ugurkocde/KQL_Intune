@@ -1,0 +1,110 @@
+{
+    "version": "Notebook/1.0",
+    "items": [
+      {
+        "type": 1,
+        "content": {
+          "json": "# Intune Dashboard\n---\n\nThis is an example to visualize some of the queries from this repository: https://github.com/ugurkocde/KQL_Intune\n\nPlease take your time to play around, test the settings and add more queries."
+        },
+        "name": "text - 2"
+      },
+      {
+        "type": 3,
+        "content": {
+          "version": "KqlItem/1.0",
+          "query": "// Visualize Android Versions and filtering for devices that had a connection to intune in the last 30 days.\r\nIntuneDevices\r\n| where OS contains \"Android\"\r\n| where todatetime(LastContact) > ago(30d) \r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| summarize Versionen=count() by OSVersion\r\n| sort by Versionen desc \r\n| render piechart with (title=\"Android Versions\")",
+          "size": 3,
+          "title": "Android Versions",
+          "timeContext": {
+            "durationMs": 2592000000
+          },
+          "queryType": 0,
+          "resourceType": "microsoft.operationalinsights/workspaces"
+        },
+        "customWidth": "25",
+        "name": "query - 1"
+      },
+      {
+        "type": 3,
+        "content": {
+          "version": "KqlItem/1.0",
+          "query": "// Visualize iOS Versions and filtering for devices that had a connection to intune in the last 30 days.\r\nIntuneDevices\r\n| where OS contains \"iOS/iPadOS\"\r\n| where todatetime(LastContact) > ago(30d) \r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| summarize Versionen=count() by OSVersion\r\n| sort by Versionen desc \r\n| render piechart with ( title=\"iOS/iPadOS Versions\")",
+          "size": 3,
+          "title": "iOS/iPadOS Versions",
+          "timeContext": {
+            "durationMs": 86400000
+          },
+          "queryType": 0,
+          "resourceType": "microsoft.operationalinsights/workspaces"
+        },
+        "customWidth": "25",
+        "name": "query - 2"
+      },
+      {
+        "type": 3,
+        "content": {
+          "version": "KqlItem/1.0",
+          "query": "// Visualize Windows Versions and filtering for devices that had a connection to intune in the last 30 days.\r\nIntuneDevices\r\n| where OS contains \"Windows\"\r\n| where todatetime(LastContact) > ago(30d) \r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| summarize Versionen=count() by OSVersion\r\n| sort by Versionen desc \r\n| render piechart with ( title=\"Windows Build Versions\")",
+          "size": 3,
+          "title": "Windows Versions",
+          "timeContext": {
+            "durationMs": 2592000000
+          },
+          "queryType": 0,
+          "resourceType": "microsoft.operationalinsights/workspaces"
+        },
+        "customWidth": "25",
+        "name": "query - 3"
+      },
+      {
+        "type": 3,
+        "content": {
+          "version": "KqlItem/1.0",
+          "query": "// Visualize Number of Devices with different SKU (Pro and Enterprise Versions)\r\nIntuneDevices\r\n| where OS == \"Windows\"\r\n| where todatetime(LastContact) > ago(30d) // filter for devices that have contacted intune in the last 30 days\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| summarize Number=count() by SkuFamily\r\n| render piechart ",
+          "size": 3,
+          "title": "Windows SKU",
+          "timeContext": {
+            "durationMs": 2592000000
+          },
+          "queryType": 0,
+          "resourceType": "microsoft.operationalinsights/workspaces"
+        },
+        "customWidth": "25",
+        "name": "query - 5"
+      },
+      {
+        "type": 3,
+        "content": {
+          "version": "KqlItem/1.0",
+          "query": "IntuneDevices\r\n//Gets all data generated in 180 days\r\n| where TimeGenerated > ago(180d) \r\n//Optionally filter only devices have contact to Intune in 30 days\r\n| where todatetime(LastContact) > ago (30d) \r\n| summarize arg_max(TimeGenerated, *) by DeviceName, startofweek(TimeGenerated)\r\n| where OS == \"Windows\"\r\n| summarize JoinSummary=count()by JoinType, startofweek(TimeGenerated)\r\n| where isnotempty(JoinType)\r\n| render columnchart\r\n    with (\r\n    kind=unstacked,\r\n    ytitle=\"Device Count\",\r\n    xtitle=\"Week\",\r\n    title=\"Device count by join type per week\") ",
+          "size": 0,
+          "title": "Join Types",
+          "timeContext": {
+            "durationMs": 2592000000
+          },
+          "queryType": 0,
+          "resourceType": "microsoft.operationalinsights/workspaces",
+          "visualization": "timechart"
+        },
+        "customWidth": "50",
+        "name": "query - 4"
+      },
+      {
+        "type": 3,
+        "content": {
+          "version": "KqlItem/1.0",
+          "query": "// Visualize when your devices last contacted Intune\r\n// See here: https://github.com/reprise99/Sentinel-Queries/blob/main/Intune/IntuneDevices-VisualizeLastContact.kql\r\nIntuneDevices\r\n| where TimeGenerated > ago(90d)\r\n| where isnotempty(LastContact)\r\n| summarize arg_max(TimeGenerated, *) by DeviceId\r\n| extend LastContactTime = todatetime(LastContact)\r\n| project DeviceId, LastContactTime\r\n| where LastContactTime <> todatetime('0001-01-01T00:00:00Z')\r\n| summarize ['Device Count']=count()by startofmonth(LastContactTime)\r\n| render columnchart with (title=\"Intune devices by last contact time\", xtitle=\"Month\")",
+          "size": 0,
+          "title": "Number of Devices that contacted Intune the last time",
+          "timeContext": {
+            "durationMs": 2592000000
+          },
+          "queryType": 0,
+          "resourceType": "microsoft.operationalinsights/workspaces"
+        },
+        "customWidth": "50",
+        "name": "query - 6"
+      }
+    ],
+    "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+  }
