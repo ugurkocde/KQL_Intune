@@ -1,6 +1,6 @@
-## Azure Workbook Template
+## Azure Workbook Template - Intune Dashboard
 
-You can use the template and import it into your Azure Workbook to test the possibilities.
+You can use the template and import it into your Azure Workbook to test the possibilities of a Azure Workbook.
 
 1. Go to your Log Analytics Workspace which has the Intune Data connection setup and enabled.
 
