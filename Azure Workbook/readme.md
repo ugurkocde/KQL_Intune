@@ -22,6 +22,6 @@ You can use the template and import it into your Azure Workbook to test the poss
 6. Copy paste the content (or overwrite) from here: https://raw.githubusercontent.com/ugurkocde/KQL_Intune/main/Azure%20Workbook/workbook_template_example.json
 into the "Gallery Template".
    
-7. Click on Apply
+7. Click on Apply:
 
 ![image](https://user-images.githubusercontent.com/43906965/184655591-75b8731f-ec7b-421e-9f86-66e03536025e.png)
