@@ -25,9 +25,198 @@
                 "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
             ],
             "properties": {
-                "displayName": "Intune - Did User Reach Desktop",
-                "description": "Shows Devices where User did not reach Desktop even though Auopilot was successful. Result also shows DeviceName for further troubleshooting if needed.",
-                "body": "IntuneOperationalLogs\r\n| extend DidUserReachDesktop = todynamic(Properties).DidUserReachDesktop",
+                "displayName": "Intune Audit - Changes in Configuration Profiles",
+                "description": "Changes in Configuration Profiles",
+                "body": "IntuneAuditLogs\r\n| where OperationName contains \"patch\"\r\n| extend User = todynamic(Properties).Actor.UPN\r\n| extend Policy = todynamic(Properties).TargetDisplayNames\r\n| mv-expand todynamic(Properties).Targets[0].ModifiedProperties\r\n| extend Configuration = todynamic(Properties_Targets_0_ModifiedProperties).Name\r\n| extend ['New Value'] = todynamic(Properties_Targets_0_ModifiedProperties).New\r\n| extend ['Old Value'] = todynamic(Properties_Targets_0_ModifiedProperties).Old\r\n| project TimeGenerated, Policy, Configuration, ['New Value'], ['Old Value'], User", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab5')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Audit - Deleted Devices",
+                "description": "Deleted Devices",
+                "body": "IntuneAuditLogs\r\n| where OperationName contains \"Delete Manageddevice\"\r\n| extend User = todynamic(Properties).Actor.UPN\r\n| extend Application = todynamic(Properties).Actor.ApplicationName",
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab5')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Audit - Show Client Certificates",
+                "description": "Show Client Certificates",
+                "body": "IntuneAuditLogs\r\n| where OperationName has \"ClientCertificate\"\r\n| extend User = tostring(todynamic(Properties).Actor.UPN)\r\n| extend DeviceId = tostring(todynamic(Properties).TargetObjectIds[0])\r\n| join kind=leftouter IntuneDevices on DeviceId\r\n| distinct TimeGenerated, User, DeviceName, OperationName\r\n| sort by TimeGenerated desc",
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab5')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Audit - Show Enable Lost Mode Devices",
+                "description": "Show Enable Lost Mode Devices",
+                "body": "IntuneAuditLogs\r\n| where OperationName has \"enableLostMode\"\r\n| extend User = todynamic(Properties).Actor.UPN\r\n| extend DeviceId = tostring(todynamic(Properties).TargetObjectIds[0])\r\n| join kind=leftouter IntuneDevices on DeviceId // DeviceName from IntuneDevices\r\n| distinct TimeGenerated, User, DeviceName\r\n| sort by TimeGenerated desc ",
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab5')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Audit - Show Feature Update Policies",
+                "description": "Changes Feature Update Policies",
+                "body": "IntuneAuditLogs\r\n| where OperationName has \"WindowsFeatureUpdateProfile\"\r\n| extend User = todynamic(Properties).Actor.UPN\r\n| extend ['Name of Policy'] = todynamic(Properties).TargetDisplayNames[0]\r\n| extend Changes = todynamic(Properties).Targets[0].ModifiedProperties[0].Name\r\n| project ['Name of Policy'], Changes, User", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab5')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Audit - Show Located Devices",
+                "description": "Show Devices for which the option “Locate Device“ was used.",
+                "body": "IntuneAuditLogs\r\n| where OperationName has \"locateDevice\"\r\n| extend User = todynamic(Properties).Actor.UPN\r\n| extend DeviceId = tostring(todynamic(Properties).TargetObjectIds[0])\r\n| join kind=leftouter IntuneDevices on DeviceId\r\n| distinct TimeGenerated, User, DeviceName\r\n| sort by TimeGenerated desc ", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab5')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Audit - All Actions, Apps and Users",
+                "description": "Show What Actions took place from which App Or User.",
+                "body": "IntuneAuditLogs\r\n| parse Properties with * ',\"TargetDisplayNames\":[\"' Object '\"],' *\r\n| where Object != \"\"\r\n| extend User = todynamic(Properties).Actor.UPN\r\n| extend ['Azure Application'] = todynamic(Properties).Actor.ApplicationName\r\n| project OperationName, ['Task'] = Object, ['Azure Application'], User ", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab5')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Audit - All Actions, Apps and Users",
+                "description": "Show What Actions took place from which App Or User.",
+                "body": "IntuneAuditLogs\r\n| parse Properties with * ',\"TargetDisplayNames\":[\"' Object '\"],' *\r\n| where Object != \"\"\r\n| extend User = todynamic(Properties).Actor.UPN\r\n| extend ['Azure Application'] = todynamic(Properties).Actor.ApplicationName\r\n| project OperationName, ['Task'] = Object, ['Azure Application'], User ", 
                 "related": {
                     "categories": [
                         "desktopanalytics"
