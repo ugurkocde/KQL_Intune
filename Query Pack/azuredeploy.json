@@ -230,6 +230,215 @@
                     ]
                 }
             }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/9256628d-b075-410f-93b9-a680ef4e0022')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Compliance - Intune devices that are compliant with OS, OS Version and number of devices",
+                "description": "Intune devices that are compliant with OS, OS Version, and number of devices.",
+                "body": "IntuneDeviceComplianceOrg\r\n| where isnotempty(DeviceName)\r\n| where ComplianceState == \"Compliant\"\r\n| summarize count() by OSDescription, OSVersion", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/a5a11701-4284-4120-b891-123b41cdd04a')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Compliance - List of Devices that have DeviceHealthThreatLevel Status of Secured",
+                "description": "List of Devices that have DeviceHealthThreatLevel Status of Secured.",
+                "body": "IntuneDeviceComplianceOrg\r\n| where isnotempty(DeviceHealthThreatLevel)\r\n| where DeviceHealthThreatLevel == \"Secured\"\r\n| project DeviceName, UserName , DeviceHealthThreatLevel", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/e05b48fc-e130-431b-8d6c-3d01bf3fa406')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Compliance - Not compliant Devices",
+                "description": "Not compliant Devices.",
+                "body": "IntuneDeviceComplianceOrg\r\n| where todatetime(LastContact) > ago(30d)\r\n| where ComplianceState == \"Not compliant\"\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| project ComplianceState, DeviceName, LastContact", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/3d5b9eab-d6f3-4fb7-9f03-27d4b7e8071b')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Compliance - Number Of Company Owned Devices With Compliance Status",
+                "description": "Count of Company owned Devices that are Compliant or Not compliant",
+                "body": "IntuneDeviceComplianceOrg\r\n| where todatetime(LastContact) > ago(30d)\r\n| where ComplianceState == \"Not compliant\"\r\n| where OwnerType == \"Company\"\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| project ComplianceState, DeviceName, LastContact\r\n| summarize count(DeviceName)", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/9f0cf4ce-85dd-43d4-9e28-e583a2703fa2')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Compliance - List of devices with compliance status",
+                "description": "List of devices with compliance status.",
+                "body": "IntuneDeviceComplianceOrg\r\n| where todatetime(LastContact) > ago(30d)\r\n| where ComplianceState == \"Not compliant\"\r\n| where OwnerType == \"Company\"\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| project ComplianceState, DeviceName, LastContact, OS", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/b7bdacbb-5b4d-4be7-89dd-0e67819ff025')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Compliance - Number Of Active Devices In The Last 7 And 30 Days",
+                "description": "Number Of Active Devices In The Last 7 And 30 Days.",
+                "body": "let Monthly = \r\nIntuneDeviceComplianceOrg\r\n| where todatetime(LastContact) > ago(30d)\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| summarize count(DeviceName)\r\n| extend CustomName=\"Active Devices\"\r\n| extend MonthlyCount=count_DeviceName;\r\nlet Weekly=\r\nIntuneDeviceComplianceOrg\r\n| where todatetime(LastContact) > ago(7d)\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| summarize count(DeviceName)\r\n| extend CustomName=\"Active Devices\"\r\n| extend WeeklyCount=count_DeviceName;\r\nMonthly\r\n| join kind=inner Weekly on CustomName\r\n| project-rename ['Last 30 Days']=MonthlyCount, ['Last 7 Days'] = WeeklyCount, Description=CustomName\r\n| project Description,['Last 7 Days'],['Last 30 Days']", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/ab1f2e2c-3be6-448e-9260-d57d3a3489e5')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Compliance - Number Of Company Owned Devices That Are Compliant Or Not Compliant Summarized By OS Platform",
+                "description": "Number Of Company Owned Devices That Are Compliant Or Not Compliant Summarized By OS Platform.",
+                "body": "let notcompliant =\r\nIntuneDeviceComplianceOrg\r\n| where ComplianceState == \"Not compliant\"\r\n| where OwnerType == \"Company\"\r\n| where OSDescription != ""\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| project ComplianceState, DeviceName, LastContact, OSDescription, OS\r\n| summarize count(DeviceName) by OSDescription;\r\nlet compliant =\r\nIntuneDeviceComplianceOrg\r\n| where ComplianceState == \"Compliant\"\r\n| where OwnerType == \"Company\"\r\n| where OSDescription != ""\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| project ComplianceState, DeviceName, LastContact, OSDescription, OS\r\n| summarize count(DeviceName) by OSDescription;\r\nnotcompliant\r\n| join kind=inner compliant on OSDescription\r\n| project-rename\r\n[\"Compliant\"]=count_DeviceName1,\r\n[\"Not Compliant\"]=count_DeviceName,\r\n[\"Platform\"]=OSDescription\r\n| project [\"Platform\"], [\"Compliant\"], [\"Not Compliant\"]\r\n sort by Compliant desc ", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/89ae24be-fdfb-403c-9f40-4ee3922144e0')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Compliance - Number of Devices with Device Health Threat Level Status",
+                "description": "Number of Devices with Device Health Threat Level Status.",
+                "body": "let secured =\r\nIntuneDeviceComplianceOrg\r\n| where isnotempty(DeviceHealthThreatLevel)\r\n| where DeviceHealthThreatLevel == \"Secured\"\r\n| distinct DeviceName, UserName , DeviceHealthThreatLevel\r\n| summarize count(DeviceName)\r\n| extend ['Number of Devices'] = count_DeviceName\r\n| extend Status = \"Secured\";\r\nlet notsecured =\r\nIntuneDeviceComplianceOrg\r\n| where isnotempty(DeviceHealthThreatLevel)\r\n| where DeviceHealthThreatLevel == \"Not Secured\"\r\n| distinct  DeviceName, UserName , DeviceHealthThreatLevel\r\n| summarize count(DeviceName)\r\n| extend ['Number of Devices'] = count_DeviceName\r\n| extend Status = \"Not Secured\";\r\nlet unknown =\r\nIntuneDeviceComplianceOrg\r\n| where isnotempty(DeviceHealthThreatLevel)\r\n| where DeviceHealthThreatLevel == \"Unknown\"\r\n| distinct  DeviceName, UserName , DeviceHealthThreatLevel\r\n| summarize count(DeviceName)\r\n| extend ['Number of Devices'] = count_DeviceName\r\n| extend Status = \"Unknown\";\r\nsecured\r\n| union notsecured, unknown\r\n| project Status, ['Number of Devices']\r\n| sort by ['Number of Devices']", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
         }
     ]
 }
