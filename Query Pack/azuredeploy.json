@@ -20,7 +20,7 @@
         {
             "type": "Microsoft.OperationalInsights/querypacks/queries",
             "apiVersion": "2019-09-01",
-            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcdasb6')]",
+            "name": "[concat(parameters('resourceName'), '/b4339fdf-730e-4547-8884-1746c1ce69f9')]",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
             ],
