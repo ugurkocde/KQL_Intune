@@ -46,7 +46,7 @@
         {
             "type": "Microsoft.OperationalInsights/querypacks/queries",
             "apiVersion": "2019-09-01",
-            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4das69ab7')]",
+            "name": "[concat(parameters('resourceName'), '/8f7b1ac4-7430-42b2-ae81-8fe6bbb558f1')]",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
             ],
@@ -73,7 +73,7 @@
         {
             "type": "Microsoft.OperationalInsights/querypacks/queries",
             "apiVersion": "2019-09-01",
-            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab8')]",
+            "name": "[concat(parameters('resourceName'), '/4d7b8384-86b1-48fb-aeae-10122a95ccce')]",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
             ],
@@ -100,7 +100,7 @@
         {
             "type": "Microsoft.OperationalInsights/querypacks/queries",
             "apiVersion": "2019-09-01",
-            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab9')]",
+            "name": "[concat(parameters('resourceName'), '/c605f64d-2fd9-46b2-a617-a54202ff0e78')]",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
             ],
@@ -127,7 +127,7 @@
         {
             "type": "Microsoft.OperationalInsights/querypacks/queries",
             "apiVersion": "2019-09-01",
-            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab10')]",
+            "name": "[concat(parameters('resourceName'), '/a67640a6-d3b1-428c-8367-35a7e344f3bb')]",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
             ],
@@ -154,7 +154,7 @@
         {
             "type": "Microsoft.OperationalInsights/querypacks/queries",
             "apiVersion": "2019-09-01",
-            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab11')]",
+            "name": "[concat(parameters('resourceName'), '/19abd1c1-34ec-472d-a779-8892b19769b7')]",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
             ],
@@ -181,7 +181,7 @@
         {
             "type": "Microsoft.OperationalInsights/querypacks/queries",
             "apiVersion": "2019-09-01",
-            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab12')]",
+            "name": "[concat(parameters('resourceName'), '/19a29c20-b50e-45ee-9699-472104cf5934')]",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
             ],
@@ -208,7 +208,7 @@
         {
             "type": "Microsoft.OperationalInsights/querypacks/queries",
             "apiVersion": "2019-09-01",
-            "name": "[concat(parameters('resourceName'), '/002c2404-73e1-4639-be6d-c4bcec969ab13')]",
+            "name": "[concat(parameters('resourceName'), '/a4484f8f-cda7-4f84-9ecd-ba36fee2ffd6')]",
             "dependsOn": [
                 "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
             ],
