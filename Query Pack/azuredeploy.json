@@ -439,6 +439,654 @@
                     ]
                 }
             }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/4446515f-9f8c-49dd-b66f-bf7751886dcc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Compare OS Build Today And Yesterday",
+                "description": "Compare OS Version changes between yesterday and today. It will calculate the difference (number of devices) between two days.",
+                "body": "let Yesterday=\r\nIntuneDevices\r\n| where TimeGenerated < ago(1d)\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| where todatetime(LastContact) > ago(30d)\r\n| summarize count() by OSVersion\r\n| sort by OSVersion desc\r\n| extend CustomName = OSVersion\r\n| extend Version_Yesterday = count_;\r\nlet Today=\r\nIntuneDevices\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| where todatetime(LastContact) > ago(30d)\r\n| summarize count() by OSVersion\r\n| sort by OSVersion desc\r\n| extend CustomName = OSVersion\r\n| extend Version_Today = count_;\r\nYesterday\r\n| join kind=inner Today on OSVersion\r\n| project CustomName, Version_Today, Version_Yesterday, Difference = Version_Today-Version_Yesterday\r\n| sort by CustomName desc", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/e1deed3a-b6f4-47fb-bf10-5f914e5d31e4')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Devices And PrimaryUser",
+                "description": "List of Devices and the assigned PrimaryUser. Filtering devices without a PrimaryUser.",
+                "body": "IntuneDevices\r\n| where PrimaryUser !startswith \"000000\"\r\n| project DeviceName, PrimaryUser", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/3f3642ea-db22-44bb-82f4-cf81b4b177f2')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Devices Registered But Not Managed By Intune",
+                "description": "Devices that are registered in Intune but not managed by it. Also shows User and Device Name as well when it was registered Intune.",
+                "body": "IntuneDevices\r\n| where DeviceState != \"Managed\"\r\n| where SourceSystem == \"Microsoft Intune\"\r\n| distinct UserName, DeviceName, SerialNumber, ['Joined Intune Date:'] = CreatedDate, JoinType", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/203bee2a-1ff7-4953-9cd9-8d87bdcf190c')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Devices Without Primary User",
+                "description": "List of Devices with no PrimaryUser.",
+                "body": "IntuneDevices\r\n| where OS == \"Windows\"\r\n| where PrimaryUser startswith \"000000\"\r\n| project DeviceName, PrimaryUser", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/7cc82f92-914e-460c-9478-88617ab999fd')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - End of Life",
+                "description": "Show EOL Dates and the number of devices effected for Win 11 21H2, Win 10 21H2, 21H1 and also 20H2.",
+                "body": "let Windows11_21H2 =\r\nIntuneDevices\r\n| where OS has \"Windows\"\r\n| extend Build = split(OSVersion, \".\")[2]\r\n| where Build contains \"22000\"\r\n| summarize count(DeviceName) by tostring(Build)\r\n| extend ['Win11_21H2 Home, Pro - End of servicing'] = \"2023-10-10\"\r\n| extend ['Win11_21H2 Enterprise - End of servicing'] = \"2024-10-08\"\r\n| extend CustomName=\"Number of Devices\";\r\nlet 21H2 =\r\nIntuneDevices\r\n| where OS has \"Windows\"\r\n| extend Build = split(OSVersion, \".\")[2]\r\n| where Build contains \"19044\"\r\n| summarize count(DeviceName) by tostring(Build)\r\n| extend ['21H2 Home, Pro - End of servicing'] = \"2023-06-13\"\r\n| extend ['21H2 Enterprise - End of servicing'] = \"2024-06-11\"\r\n| extend CustomName=\"Number of Devices\";\r\nlet 21H1 =\r\nIntuneDevices\r\n| where OS has \"Windows\"\r\n| extend Build = split(OSVersion, \".\")[2]\r\n| where Build contains \"19043\"\r\n| summarize count(DeviceName) by tostring(Build)\r\n| extend ['21H1 Home, Pro - End of servicing'] = \"2022-12-13\"\r\n| extend ['21H1 Enterprise - End of servicing'] = \"2022-12-13\"\r\n| extend CustomName=\"Number of Devices\";\r\nlet 20H2 =\r\nIntuneDevices\r\n| where OS has \"Windows\"\r\n| extend Build = split(OSVersion, \".\")[2]\r\n| where Build contains \"19042\"\r\n| summarize count(DeviceName) by tostring(Build)\r\n| extend ['20H2 Home, Pro - End of servicing'] = \"End of servicing\"\r\n| extend ['20H2 Enterprise - End of servicing'] = \"2023-05-09\"\r\n| extend CustomName=\"Number of Devices\";\r\n21H2\r\n| join kind=inner 21H1 on CustomName\r\n| join kind=inner 20H2 on CustomName\r\n| join kind=inner Windows11_21H2 on CustomName\r\n| project\r\n['Number of Devices with 21H2'] = count_DeviceName, ['21H2 Home, Pro - End of servicing'], ['21H2 Enterprise - End of servicing'],\r\n['Number of Devices with 21H1'] = count_DeviceName1, ['21H1 Home, Pro - End of servicing'], ['21H1 Enterprise - End of servicing'],\r\n['Number of Devices with 20H2'] = count_DeviceName2,  ['20H2 Home, Pro - End of servicing'], ['20H2 Enterprise - End of servicing'],\r\n['Number of Devices with Win11_21H2'] = count_DeviceName3, ['Win11_21H2 Home, Pro - End of servicing'], ['Win11_21H2 Enterprise - End of servicing']", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/45bc2d11-b942-4d5b-af81-a9f90b83c9a4')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Free Storage",
+                "description": "Show the percentage of free storage on devices.",
+                "body": "IntuneDevices\r\n| where OS == \"Windows\"\r\n| where StorageFree != \"0\" and StorageTotal != \"0\"\r\n| where DeviceName != \"User deleted for this device\" and DeviceName != \"\"\r\n| extend ['Free Storage'] = StorageFree\r\n| extend ['Total Storage'] = StorageTotal\r\n| extend Percentage = round(todouble(StorageFree) * 100 / todouble(StorageTotal), 2)\r\n| distinct DeviceName, ['Free Storage'], ['Total Storage'], Percentage, UPN\r\n| sort by Percentage asc ", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/8bd915e9-07f3-4871-90c4-886dcf9050f7')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Join Types",
+                "description": "Show all devices and Join Types.",
+                "body": "IntuneDevices\r\n| where OS == \"Windows\"\r\n| where isnotempty(JoinType)\r\n| distinct JoinType, DeviceName, DeviceRegistrationState", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/4b651017-db66-4fdc-a046-2ac70d7ec64b')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Last Time The Device Was Active",
+                "description": "Show a list of devices and timestamp the last time they successfully connected to Intune.",
+                "body": "IntuneDeviceComplianceOrg\r\n| where todatetime(LastContact) > ago(30d)\r\n| extend Date=format_datetime(todatetime(LastContact), \"dd.MM.yyyy\")\r\n| extend Time=format_datetime(todatetime(LastContact), \"hh:mm tt\")\r\n| extend ['Last successful connection']=strcat(Date,\" \",Time)\r\n| project DeviceName, ['Last successful connection']\r\n| project-rename ['Name of the Device'] = DeviceName", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/0edb89a4-eee9-4288-a854-967a664b8b56')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - List of Devices That Are Not Bitlocker Encrypted",
+                "description": "Show a list of devices whose the OS Drive is not bitlocker encrypted.",
+                "body": "IntuneDevices\r\n| where OS == \"Windows\"\r\n| where EncryptionStatusString == \"False\"\r\n| where Ownership == \"Corporate\"\r\n| where CompliantState == \"Noncompliant\"\r\n| project DeviceName, EncryptionStatusString, CompliantState", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/ec6ab293-1c89-45cd-805c-a5e52f388249')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - List of all Devices that where added to Intune with OS Platform information",
+                "description": "List of all Devices that where added to Intune with OS Platform information in a specific timeframe.",
+                "body": "IntuneDevices\r\n| where CreatedDate contains \"2022-06\" # You can change the month and year if you want or delete the line completely\r\n| where Ownership == \"Corporate\"\r\n| project DeviceName, OS, OSVersion, UserName, CreatedDate\r\n| summarize count(DeviceName) by OS", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/a66631db-1edc-439c-8947-ab908dad6b95')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Number Of Devices And Manufacturers",
+                "description": "List of device models and Manufacturers and number of devices for each model.",
+                "body": "IntuneDevices\r\n| where OS == \"Windows\"\r\n| summarize count(DeviceName) by Model, Manufacturer", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/452cf60f-cbdb-4538-8108-ed0858a36a80')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Number Of Devices That Are Managed By Intune Or Are CoManaged",
+                "description": "Number of devices that are managed by Intune or are Co-managed.",
+                "body": "IntuneDevices\r\n| where OS == \"Windows\"\r\n| summarize count(DeviceName) by ManagedBy", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/6a8b5b84-7d18-45a3-8ec2-1da337212055')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Show iOS Devices with Jailbreak",
+                "description": "Jailbroken devices in Intune.",
+                "body": "IntuneDevices\r\n| where OS == \"iOS/iPadOS\"\r\n| where Ownership == \"Corporate\"\r\n| where JailBroken == \"True\"\r\n| project JailBroken, DeviceName, UPN", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/27e1fb2e-b561-4ee9-8e9c-e9bacdada8d0')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Sign Ins",
+                "description": "Show Device Logins for Azure joined devices. Result will show success, failure, login status, error codes as well as the location (Country, State, City) of the device.",
+                "body": "SigninLogs\r\n| where OperationName == \"Sign-in activity\"\r\n| where UserDisplayName != \"On-Premises Directory Synchronization Service Account\"\r\n| where isnotempty(Status)\r\n| extend Login_Status = tostring(todynamic(Status).errorCode) // Check the error code here: https://login.microsoftonline.com/error\r\n| extend Login_Status_Info = tostring(todynamic(Status).failureReason)\r\n| extend Device_Join_Status = tostring(todynamic(DeviceDetail).trustType)\r\n| extend location_country = tostring(todynamic(LocationDetails).countryOrRegion)\r\n| extend location_city = tostring(todynamic(LocationDetails).city)\r\n| extend location_state = tostring(todynamic(LocationDetails).state)\r\n| extend Location = strcat(location_country, \" \", \"/\", \" \", location_state, \" \", \"/\",\" \", location_city)\r\n| extend Authentication_Method = tostring(todynamic(AuthenticationDetails).[0].authenticationMethod)\r\n| extend Authentication_Detail = tostring(todynamic(AuthenticationDetails).[0].authenticationStepResultDetail)\r\n| extend Authentication_Success = tostring(todynamic(AuthenticationDetails).[0].succeeded)\r\n| where isnotempty(Device_Join_Status)\r\n| where AppDisplayName == \"Windows Sign In\"\r\n| project TimeGenerated, UserDisplayName, AppDisplayName, Login_Status, Login_Status_Info, Device_Join_Status, Location,  Authentication_Method, Authentication_Detail, Authentication_Success", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/3282c310-f37e-4a38-ba63-b3be2d7fefbc')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Unsupported Android Versions",
+                "description": "Out-of-support Android Versions.",
+                "body": "IntuneDevices\r\n| where OS has \"Android\"\r\n| extend Version = todecimal(OSVersion)\r\n| where Version < 10\r\n| where DeviceName != \"User deleted for this device\"\r\n| where Ownership == \"Corporate\"\r\n| project DeviceName, UserName , Version, Ownership", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/b0001fd2-b908-40a8-9503-9cb1249d6dd0')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Unsupported iOS Versions",
+                "description": "Out-of-support iOS Versions.",
+                "body": "IntuneDevices\r\n| where OS has \"iOS\"\r\n| extend Version = todecimal(OSVersion)\r\n| where Version < 13\r\n| where DeviceName != \"User deleted for this device\"\r\n| where Ownership == \"Corporate\"\r\n| project DeviceName, Version, Ownership", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/a937b22b-fe80-4356-a864-22a1596aa57a')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Visualize Android Versions",
+                "description": "Visualize Android Versions and filtering for devices that had a connection to intune in the last 30 days.",
+                "body": "IntuneDevices\r\n| where OS contains \"Android\"\r\n| where todatetime(LastContact) > ago(30d)\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| summarize Versionen=count() by OSVersion\r\n| sort by Versionen desc\r\n| render piechart with (title=\"Android Versions\")", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/0b0aa572-5ab5-4a0c-9512-1a616dd9a9e9')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Visualize Number of Devices with different SKU",
+                "description": "Visualize Number of Devices with different SKU (Pro and Enterprise Versions).",
+                "body": "IntuneDevices\r\n| where OS == \"Windows\"\r\n| where todatetime(LastContact) > ago(30d) // filter for devices that have contacted intune in the last 30 days\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| summarize Number=count() by SkuFamily\r\n| render piechart ", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/3d627cca-8b7e-4a8b-979c-4714404e3578')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Visualize The Join Type.",
+                "description": "Visualize the join type (Azure AD joined, Azure AD registered or Hybrid joined) of your MEM/Intune devices per week.",
+                "body": "IntuneDevices\r\n| where todatetime(LastContact) > ago (30d) // Filter only devices the have contacted Intune in the last 30 days\r\n| summarize arg_max(TimeGenerated, *) by DeviceName, startofweek(TimeGenerated)\r\n| where OS == \"Windows\"\r\n| summarize JoinSummary=count()by JoinType, startofweek(TimeGenerated)\r\n| where isnotempty(JoinType)\r\n| render columnchart\r\nwith (\r\nkind=unstacked,\r\nytitle=\"Device Count\",\r\nxtitle=\"Week\",\r\ntitle=\"Device Number by join type per week\") ", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/2101172e-1653-41db-ac34-f2de71e748c9')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Visualize When Your Devices Last Contacted Intune",
+                "description": "Visualize when your devices last contacted Intune.",
+                "body": "IntuneDevices\r\n| where TimeGenerated > ago(90d)\r\n| where isnotempty(LastContact)\r\n| summarize arg_max(TimeGenerated, *) by DeviceId\r\n| extend LastContactTime = todatetime(LastContact)\r\n| project DeviceId, LastContactTime\r\n| where LastContactTime <> todatetime('0001-01-01T00:00:00Z')\r\n| summarize ['Device Count']=count()by startofmonth(LastContactTime)\r\n| render columnchart with (title=\"Intune devices by last contact time\", xtitle=\"Month\")", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/328c8805-f409-4351-a5fb-6e39b1801502')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Visualize Windows Versions",
+                "description": "Visualize Windows Versions and filtering for devices that had a connection to intune in the last 30 days.",
+                "body": "IntuneDevices\r\n| where OS contains \"Windows\"\r\n| where todatetime(LastContact) > ago(30d)\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| summarize Versionen=count() by OSVersion\r\n| sort by Versionen desc\r\n| render piechart with ( title=\"Windows Build Versions\")", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/0bd5bb29-a6e6-46c9-a065-bb55ab62d978')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Visualize iOS Versions",
+                "description": "Visualize iOS Versions and filtering for devices that had a connection to intune in the last 30 days.",
+                "body": "IntuneDevices\r\n| where OS contains \"iOS/iPadOS\"\r\n| where todatetime(LastContact) > ago(30d)\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| summarize Versionen=count() by OSVersion\r\n| sort by Versionen desc\r\n| render piechart with ( title=\"iOS/iPadOS Versions\")", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/369d6ff0-520a-4e7d-8d5d-0c6b47aae939')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - Visualize the Windows Build Numbers and the number of Devices",
+                "description": "Visualize the Windows Build Numbers and the number of Devices.",
+                "body": "IntuneDevices\r\n| where OS == \"Windows\"\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| where todatetime(LastContact) > ago(30d) // Include only Devices that had a connection with Intune in the last 30 days.\r\n| summarize Devices = count() by OSVersion\r\n| where OSVersion != \"0.0.0.0\" // Exclude devices that have not reported the Windows Build.\r\n| sort by Devices\r\n| render columnchart // Visualize the output.\r\nwith (\r\nkind=unstacked,\r\nytitle=\"Device Count\",\r\nxtitle=\"Windows Build\",\r\ntitle=\"Number of Devices by Windows Build\") ", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/2b2f1bca-724f-45c5-82f2-bdbec2cda442')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Device - iOS Versions",
+                "description": "Number of iPhones and iPads on Version 14, 15, 16.",
+                "body": "let version_16 =\r\nIntuneDevices\r\n| where OS == \"iOS/iPadOS\"\r\n| where OSVersion contains  \"16\"\r\n| summarize ['iOS 16'] = count(DeviceName)\r\n| extend Dummy = \"Number of Devices\";\r\nlet version_15 =\r\nIntuneDevices\r\n| where OS == \"iOS/iPadOS\"\r\n| where OSVersion contains  \"15\"\r\n| summarize ['iOS 15'] = count(DeviceName)\r\n| extend Dummy = \"Number of Devices\";\r\nlet version_14 =\r\nIntuneDevices\r\n| where OS == \"iOS/iPadOS\"\r\n| where OSVersion contains  \"14\"\r\n| summarize ['iOS 14'] = count(DeviceName)\r\n| extend Dummy = \"Number of Devices\";\r\nversion_16\r\n| join kind=inner version_15 on Dummy\r\n| join kind=inner version_14 on Dummy\r\n| distinct Dummy, ['iOS 14'], ['iOS 15'], ['iOS 16']", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
         }
     ]
 }
