@@ -1087,6 +1087,303 @@
                     ]
                 }
             }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/c1b8496a-f2cb-4da5-9e31-4050cba6101f')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Operational - Autopilot Duration",
+                "description": "Show how long the Autopilot process took in seconds and minutes. Result also shows DeviceName for further troubleshooting if needed.",
+                "body": "IntuneOperationalLogs\r\n| extend DeviceId = tostring(todynamic(Properties).DeviceId)\r\n| extend Time_Seconds = todynamic(Properties).TimeDiff\r\n| extend Autopilot = todynamic(Properties).IsAutopilot\r\n| extend Status = todynamic(Properties).Status\r\n| extend Time_Minutes = Time_Seconds/60\r\n| where Status == \"Completed\"\r\n| where isnotempty(Autopilot)\r\n| join kind=leftouter IntuneDevices on DeviceId\r\n| project ['Is Autopilot?'] = Autopilot, Status, DeviceName, Time_Minutes, Time_Seconds ", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/1f661152-1fef-44de-95f9-a70d4c8ac444')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Operational - Did User Reach Desktop",
+                "description": "Shows Devices where User did not reach Desktop even though Auopilot was successful. Result also shows DeviceName for further troubleshooting if needed.",
+                "body": "IntuneOperationalLogs\r\n| extend DeviceId = tostring(todynamic(Properties).DeviceId)\r\n| extend DidUserReachDesktop = todynamic(Properties).DidUserReachDesktop\r\n| extend Autopilot = todynamic(Properties).IsAutopilot\r\n| where isnotempty(DidUserReachDesktop)\r\n| join kind=leftouter IntuneDevices on DeviceId\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| project DeviceName, Autopilot, DidUserReachDesktop", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/a21c9815-5262-43d5-a238-433d8c4fd6c8')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Operational - ESP Enrollments With Profile Name",
+                "description": "ESP Enrollments With Profile Name.",
+                "body": "IntuneOperationalLogs\r\n| where TimeGenerated > ago(30d)\r\n| where OperationName == \"ESPEnrollment\" // Filter for devices with ESP Enrollment\r\n| extend Type = todynamic(Properties).EnrollmentTypeMessage\r\n| extend ESPPolicy = todynamic(Properties).ESPPolicyName // Show ESP Profile if present\r\n| where Type != \"\"\r\n| summarize count(OperationName) by tostring(Type), tostring(ESPPolicy)\r\n| project Type, ESPPolicy, count_OperationName", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/c8e5e30e-0d72-4e73-b12d-cad4a06bc225')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Operational - Enrollment Types",
+                "description": "Enrollment Types.",
+                "body": "IntuneOperationalLogs\r\n| where TimeGenerated > ago(30d) // look for devices that were active in the last 30 days\r\n| where OperationName == \"Enrollment\" // Filter for enrollments\r\n| extend Type = todynamic(Properties).EnrollmentType // Look into properties for the enrollment type\r\n| summarize count(OperationName) by tostring(Type)", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/c7954a1f-0e75-4b17-aeaf-69394627c231')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Operational - Latest Device Enrollments",
+                "description": "Show a list of Devices, with Device Name, Result and OS that have been enrolled to Intune.",
+                "body": "IntuneOperationalLogs\r\n| where TimeGenerated > ago(7d) // Change the value in () as you desire e.g. 12h, 10d, 30d. d = day, h = hour.\r\n| extend DeviceId = tostring(todynamic(Properties).IntuneDeviceId)\r\n| extend OS = tostring(todynamic(Properties).Os)\r\n| where Result == \"Success\"\r\n| where OperationName has \"Enrollment\"\r\n//| where OS == \"Windows\" // You can filter by OS Platform e.g. iOS, Android, Windows. Just replace the vaule between the \" \" and delete the // infront of |.\r\n| join kind=leftouter IntuneDevices on DeviceId // DeviceName from IntuneDevices. Can be delayed.\r\n| project TimeGenerated, DeviceId, DeviceName, Result, OperationName, OS\r\n| summarize TimeGenerated = max(TimeGenerated) by DeviceId, DeviceName, Result, OperationName, OS\r\n| sort by TimeGenerated desc", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/92a164f3-1390-47bd-8640-3e92d9f3d720')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Operational - Number Of Successful Enrollments by OS",
+                "description": "Number of Successful Enrollments by OS.",
+                "body": "IntuneOperationalLogs\r\n| where OperationName == \"Enrollment\" and Result == \"Success\"\r\n| extend OS = tostring(todynamic(Properties).Os\r\n| summarize count() by OS", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/4e972ecf-cf9c-41ac-88d1-1fd411ab92ce')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Operational - OSBuild During Autopilot",
+                "description": "Show the OS Build of Windows during Autopilot. Result also shows DeviceName for analyzing any future update or upgrade events.",
+                "body": "IntuneOperationalLogs\r\n| extend DeviceId = tostring(todynamic(Properties).DeviceId)\r\n| extend Version = todynamic(Properties).Version\r\n| where isnotempty(Version)\r\n| join kind=leftouter IntuneDevices on DeviceId\r\n| summarize arg_max(TimeGenerated, *) by DeviceName\r\n| project DeviceName, ['OS Build during Autopilot'] = Version", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/b8e6d459-7dba-415c-91e3-4cd63d0d5fe0')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Operational - Show Intune Enrollment Not Supported Devices",
+                "description": "Intune Enrollment Failure Reasons - Devices not supported by time, failure type, and operating system.",
+                "body": "IntuneOperationalLogs\r\n| extend FailureCategory_ = todynamic(Properties).FailureCategory\r\n| where FailureCategory_ == \"DeviceNotSupported\"\r\n| extend OS = todynamic(Properties).Os\r\n| extend Reason = todynamic(Properties).FailureReason\r\n| extend Type = todynamic(Properties).EnrollmentType\r\n| extend DeviceId = tostring(todynamic(Properties).AADDeviceId)\r\n| project FailureCategory_ , Reason, Type, OS, DeviceId", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/b9f8ff78-219e-48fa-bbe9-606113d1cfa1')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Operational - Show Users That Abandoned The Intune Enrollment",
+                "description": "Show Users that abandoned the Intune Enrollment.",
+                "body": "IntuneOperationalLogs\r\n| where TimeGenerated > ago(7d) // Change the value in () as you desire e.g. 12h, 10d, 30d. d = day, h = hour.\r\n| where OperationName == \"Enrollment\"\r\n| where Result == \"Fail\"\r\n| extend EnrollmentType = tostring(todynamic(Properties).EnrollmentType)\r\n| extend FailureReason = tostring(todynamic(Properties).FailureReason)\r\n| extend OS = tostring(todynamic(Properties).Os)\r\n| extend OSVersion = tostring(todynamic(Properties).OsVersion)\r\n| extend UserID = tostring(todynamic(Properties).IntuneUserId) // You will find the User in your Azure AD.\r\n| where FailureReason == \"UserAbandonment\"\r\n| project\r\nTimeGenerated,\r\nFailureReason,\r\nUserID,\r\nOS,\r\nOSVersion,\r\nOperationName,\r\nEnrollmentType\r\n| sort by TimeGenerated desc ", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/150ca032-652d-46d7-be7a-edf5432b9810')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Operational - Visualize Enrollment Statistics",
+                "description": "Visualize Enrollment Statistics (Success and Fail) over time.",
+                "body": "IntuneOperationalLogs\r\n| where  OperationName == \"Enrollment\"\r\n| where TimeGenerated > ago(365d)\r\n| extend DeviceId = tostring(todynamic(Properties).IntuneDeviceId)\r\n| join kind=leftouter IntuneDevices on DeviceId\r\n| summarize arg_max(DeviceId, *) by DeviceId, startofweek(TimeGenerated)\r\n//| where Result == \"Success\" // Filter for success or Fail\r\n| summarize EnrollmentCount=count()by Result, startofweek(TimeGenerated)\r\n| render timechart\r\nwith (\r\nytitle=\"Device Count\",\r\nxtitle=\"Week\",\r\ntitle=\"Enrollments per week over time\")", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
+        },
+
+        {
+            "type": "Microsoft.OperationalInsights/querypacks/queries",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(parameters('resourceName'), '/f0c6ae65-3bcf-476b-85b3-71e2939bb97e')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/querypacks', parameters('resourceName'))]"
+            ],
+            "properties": {
+                "displayName": "Intune Operational - Visualize failed Device Deployments",
+                "description": "Visualize failed Device Deployments.",
+                "body": "IntuneOperationalLogs\r\n| extend OS = tostring(todynamic(Properties).Os)\r\n| where OS == \"Windows\"\r\n| extend DeviceId = tostring(todynamic(Properties).AADDeviceId)\r\n| where Result == \"Fail\"\r\n| join kind=leftouter IntuneDevices on DeviceId\r\n| project TimeGenerated, DeviceId, DeviceName\r\n| summarize TimeGenerated = max(TimeGenerated) by DeviceId, DeviceName\r\n| summarize [\"Number of devices that failed deployment\"] = count() by DeviceId, DeviceName, TimeGenerated\r\n| render timechart \r\nwith (\r\nkind=unstacked,\r\nytitle=\"Device Count\",\r\nxtitle=\"Date\",\r\ntitle=\"Number of devices that failed deployment\") ", 
+                "related": {
+                    "categories": [
+                        "desktopanalytics"
+                    ],
+                    "resourceTypes": [
+                        "microsoft.operationalinsights/workspaces"
+                    ]
+                },
+                "tags": {
+                    "labels": [
+                        "Intune"
+                    ]
+                }
+            }
         }
     ]
 }
