@@ -1,5 +1,8 @@
 # Welcome!
 
+
+[![Twitter Follow](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/UgurKocDe/) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ugur-koc-302b9817a/) [![Website](https://img.shields.io/badge/website-000000?style=for-the-badge&logo=About.me&logoColor=white)](https://ugurkoc.de)
+
 The goal of this repository is to share awesome KQL Queries that will help every Intune Administrator to filter for relevant informations and also present the data visually to interested parties in the form of a Azure Workbook.
 
 This collection of KQL Querries include some of which I have created because there was a neccessitiy or use case for it. Other queries are from the Community that I found particulary interisting and worth to share. The ones from the community will also contain the weblink to the source and author.
