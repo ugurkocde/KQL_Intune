@@ -1,0 +1,10 @@
+Description: 
+Shows the Number of device Wipes and Deletions Actions in Intune.
+
+Query:
+
+IntuneAuditLogs
+| where TimeGenerated > ago(30d)
+| where OperationName contains "Wipe" or OperationName contains "Delete"
+| extend OperationType = iif(OperationName contains "Wipe", "Wipe", "Delete")
+| summarize Count = count() by OperationType
