@@ -1,0 +1,12 @@
+Description:
+
+iOS Devices that do not support the latest OS version. Example with Version 17.2.1. Adjust the version accordingly.
+
+Query:
+
+IntuneDevices
+| where OS contains "iOS"
+| extend VersionArray = split(OSVersion, ".")
+| extend MajorVersion = toint(VersionArray[0]), MinorVersion = toint(VersionArray[1]), PatchVersion = toint(VersionArray[2])
+| where MajorVersion < 17 or (MajorVersion == 17 and MinorVersion < 2) or (MajorVersion == 17 and MinorVersion == 2 and PatchVersion < 1)
+| project DeviceName, OS, OSVersion
