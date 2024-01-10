@@ -5,5 +5,5 @@ Query:
 
 IntuneDevices
 | extend LastContactTime = todatetime(LastContact)
-| where LastContactTime < ago(1d)
+| where LastContactTime < ago(90d)
 | summarize arg_max(LastContactTime, *) by DeviceName
