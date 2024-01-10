@@ -1,0 +1,9 @@
+Description:
+This query lists each device registered in Intune with its most recent contact time, filtering out devices that have contacted within the 90 days.
+
+Query:
+
+IntuneDevices
+| extend LastContactTime = todatetime(LastContact)
+| where LastContactTime < ago(1d)
+| summarize arg_max(LastContactTime, *) by DeviceName
